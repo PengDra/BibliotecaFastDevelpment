@@ -529,6 +529,7 @@ public class prueba extends javax.swing.JFrame {
     private void agregarCategoriaALibroBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarCategoriaALibroBTNActionPerformed
         // TODO add your handling code here:
         //Nuevo comentario Xd
+        //comentario aun mas nuevo
         Categoria a = new Categoria();
         String stringvacio = "";
         int id_categoria;

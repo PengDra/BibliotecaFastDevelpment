@@ -217,9 +217,6 @@ public class vistaDistribuidor extends javax.swing.JFrame {
 
     private void agregarBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarBTNActionPerformed
         if (confirmaTextField()) {
-            
-            
-            
             String rut = rutTXT.getText().toUpperCase();
             String nom_empresa = nombreTXT.getText().toUpperCase();
             String direccion = direccionTXT.getText().toUpperCase();

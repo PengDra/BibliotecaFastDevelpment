@@ -8,13 +8,16 @@ package vista;
 import controlador.MySQLManager;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Autor;
 import modelo.Categoria;
 import modelo.Editorial;
 import modelo.CategoriaLibroEnlace;
+import modelo.Compra;
+import modelo.Distribuidor;
+import modelo.Factura;
 import modelo.Idioma;
 import modelo.IdiomaLibroEnlace;
 import modelo.Libro;
@@ -40,12 +43,19 @@ public class prueba extends javax.swing.JFrame {
     ArrayList<Libro> listaLibro = new ArrayList<>();
     ArrayList<Libro> listaLibroFactura = new ArrayList<>();
     ArrayList<LibroAutorEnlace> listaAutorLibroEnlace = new ArrayList<>();
+    ArrayList<LibroAutorEnlace> listaAutorLibroEnlaceFactura = new ArrayList<>();
     ArrayList<IdiomaLibroEnlace> listaIdiomaLibroEnlace = new ArrayList<>();
+    ArrayList<IdiomaLibroEnlace> listaIdiomaLibroEnlaceFactura = new ArrayList<>();
     ArrayList<CategoriaLibroEnlace> listaCategoriaLibroEnlace = new ArrayList<>();
+    ArrayList<CategoriaLibroEnlace> listaCategoriaLibroEnlaceFactura = new ArrayList<>();
+    ArrayList<Distribuidor> listaDistribuidores = new ArrayList<>();
+    ArrayList<Factura> listaFacturas = new ArrayList<>();
+    int contnuevolibro = 1;
 
     public prueba() {
         initComponents();
         mostrarTabla();
+        //mostrarTablaFactura();
 
     }
 
@@ -59,7 +69,7 @@ public class prueba extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        facturaTBL = new javax.swing.JTable();
+        libros = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -92,25 +102,26 @@ public class prueba extends javax.swing.JFrame {
         agregarAutorALibroBTN = new javax.swing.JButton();
         agregarCategoriaALibroBTN = new javax.swing.JButton();
         idEditorialTXT = new javax.swing.JTextField();
-        idiomaLibroTXT = new javax.swing.JTextField();
+        ididiomaLibroTXT = new javax.swing.JTextField();
         agregarIdiomaALibroBTN = new javax.swing.JButton();
         verFactura = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         anhoPublicacionTXT = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        facturaTBL1 = new javax.swing.JTable();
-        AgregarAFactura = new javax.swing.JButton();
+        nuevafacturaTBL = new javax.swing.JTable();
+        confirmarlibrofacturaBTN = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         metodoPagoTXT = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        iddistribuidoraTXT = new javax.swing.JTextField();
+        numerofolioTXT = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        idlibroTXT = new javax.swing.JTextField();
+        nuevoLibroBTN = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        facturaTBL.setModel(new javax.swing.table.DefaultTableModel(
+        libros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null},
@@ -126,7 +137,7 @@ public class prueba extends javax.swing.JFrame {
                 "Id de libro", "Editorial", "Autor", "Categoría/as", "Idioma", "Título", "ISBN", "Número de serie", "Número de página", "Precio referencial"
             }
         ));
-        jScrollPane1.setViewportView(facturaTBL);
+        jScrollPane1.setViewportView(libros);
 
         jLabel2.setText("Agregar Autor por id");
 
@@ -217,9 +228,9 @@ public class prueba extends javax.swing.JFrame {
             }
         });
 
-        idiomaLibroTXT.addActionListener(new java.awt.event.ActionListener() {
+        ididiomaLibroTXT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                idiomaLibroTXTActionPerformed(evt);
+                ididiomaLibroTXTActionPerformed(evt);
             }
         });
 
@@ -234,23 +245,46 @@ public class prueba extends javax.swing.JFrame {
 
         jLabel1.setText("Anho publicacion");
 
-        facturaTBL1.setModel(new javax.swing.table.DefaultTableModel(
+        nuevafacturaTBL.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Nombre de libro", "Autor", "Valor sin IVA", "Valor con IVA", "Distribuidora"
+                "Id Libro", "Editorial", "Autor", "Categorias", "Idioma", "Titulo", "ISBN", "Numero de Serie", "Numero de Paginas", "Precio Referencial", "Valor sin IVA", "Valor con IVA", "Distribuidora"
             }
-        ));
-        jScrollPane2.setViewportView(facturaTBL1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false, false
+            };
 
-        AgregarAFactura.setText("Agregar libro A factura");
-        AgregarAFactura.addActionListener(new java.awt.event.ActionListener() {
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(nuevafacturaTBL);
+        if (nuevafacturaTBL.getColumnModel().getColumnCount() > 0) {
+            nuevafacturaTBL.getColumnModel().getColumn(0).setHeaderValue("Id Libro");
+            nuevafacturaTBL.getColumnModel().getColumn(1).setHeaderValue("Editorial");
+            nuevafacturaTBL.getColumnModel().getColumn(2).setHeaderValue("Autor");
+            nuevafacturaTBL.getColumnModel().getColumn(3).setHeaderValue("Categorias");
+            nuevafacturaTBL.getColumnModel().getColumn(4).setHeaderValue("Idioma");
+            nuevafacturaTBL.getColumnModel().getColumn(5).setHeaderValue("Titulo");
+            nuevafacturaTBL.getColumnModel().getColumn(6).setHeaderValue("ISBN");
+            nuevafacturaTBL.getColumnModel().getColumn(7).setHeaderValue("Numero de Serie");
+            nuevafacturaTBL.getColumnModel().getColumn(8).setHeaderValue("Numero de Paginas");
+            nuevafacturaTBL.getColumnModel().getColumn(9).setHeaderValue("Precio Referencial");
+            nuevafacturaTBL.getColumnModel().getColumn(10).setHeaderValue("Valor sin IVA");
+            nuevafacturaTBL.getColumnModel().getColumn(11).setHeaderValue("Valor con IVA");
+            nuevafacturaTBL.getColumnModel().getColumn(12).setHeaderValue("Distribuidora");
+        }
+
+        confirmarlibrofacturaBTN.setText("Confirmar nuevo libro en factura");
+        confirmarlibrofacturaBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AgregarAFacturaActionPerformed(evt);
+                confirmarlibrofacturaBTNActionPerformed(evt);
             }
         });
 
@@ -263,31 +297,20 @@ public class prueba extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Ver editorial");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jLabel7.setText("Ingrese el id de la distribuidora");
+
+        iddistribuidoraTXT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                iddistribuidoraTXTActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Ver Autores");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jLabel14.setText("ID libro");
 
-        jButton3.setText("VerCategorias");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        nuevoLibroBTN.setText("Nuevo libro");
+        nuevoLibroBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        jButton4.setText("Ver idiomas");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                nuevoLibroBTNActionPerformed(evt);
             }
         });
 
@@ -309,37 +332,16 @@ public class prueba extends javax.swing.JFrame {
                 .addComponent(verFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel11)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(33, 33, 33)
+                                        .addGap(12, 12, 12)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(idiomaLibroTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(163, 163, 163))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(editorialLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(idAutorTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(100, 100, 100)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(isbnTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(tituloTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(numeroSerieTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel9)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(numeroDePaginasTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                                     .addComponent(jLabel1)
@@ -349,70 +351,90 @@ public class prueba extends javax.swing.JFrame {
                                                     .addComponent(jLabel10)
                                                     .addGap(18, 18, 18)
                                                     .addComponent(precioReferencialTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                            .addComponent(jLabel8)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGap(4, 4, 4)
-                                                .addComponent(editarLibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(eliminarLibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(jLabel5)
-                                            .addComponent(jLabel6)
+                                                .addGap(130, 130, 130)
+                                                .addComponent(idAutorTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGap(132, 132, 132)
+                                                .addGap(122, 122, 122)
                                                 .addComponent(nombreAutorLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGap(10, 10, 10)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(agregarIdiomaALibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addGroup(layout.createSequentialGroup()
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                            .addComponent(jLabel12)
-                                                            .addComponent(jLabel2)
-                                                            .addComponent(jLabel3))
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                            .addGroup(layout.createSequentialGroup()
-                                                                .addGap(84, 84, 84)
-                                                                .addComponent(agregarAutorALibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                            .addGroup(layout.createSequentialGroup()
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                                .addComponent(categoriaALibroTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(agregarCategoriaALibroBTN))
-                                                            .addGroup(layout.createSequentialGroup()
-                                                                .addGap(6, 6, 6)
-                                                                .addComponent(idEditorialTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addComponent(agregarEditorialALibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                                            .addGroup(layout.createSequentialGroup()
                                                 .addGap(132, 132, 132)
+                                                .addComponent(idiomasLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(122, 122, 122)
+                                                .addComponent(categoriasLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel4)
+                                                .addGap(25, 25, 25)
+                                                .addComponent(ididiomaLibroTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(26, 26, 26)
+                                                .addComponent(agregarIdiomaALibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(104, 104, 104)
+                                                .addComponent(editorialLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                    .addComponent(jLabel14)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(idlibroTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(18, 18, 18)
+                                                    .addComponent(nuevoLibroBTN))
+                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel12)
+                                                        .addComponent(jLabel2)
+                                                        .addComponent(jLabel3))
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                            .addGap(84, 84, 84)
+                                                            .addComponent(agregarAutorALibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(layout.createSequentialGroup()
+                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                            .addComponent(categoriaALibroTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                            .addComponent(agregarCategoriaALibroBTN))
+                                                        .addGroup(layout.createSequentialGroup()
+                                                            .addGap(6, 6, 6)
+                                                            .addComponent(idEditorialTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                            .addComponent(agregarEditorialALibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                            .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(idiomasLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(categoriasLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                        .addGap(18, 18, 18)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton1)
-                                    .addComponent(jButton2)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                    .addComponent(jLabel9)
+                                                    .addComponent(jLabel8)
+                                                    .addComponent(jLabel6)
+                                                    .addComponent(jLabel5))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(tituloTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(isbnTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(numeroSerieTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(numeroDePaginasTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(editarLibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(56, 56, 56)
+                                        .addComponent(eliminarLibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(67, 67, 67)
+                                        .addComponent(confirmarlibrofacturaBTN)))
+                                .addGap(25, 25, 25)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(133, 133, 133)
-                                        .addComponent(jLabel13)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(83, 83, 83)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1089, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1089, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(6, 6, 6)
+                                            .addComponent(jLabel13)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(numerofolioTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel7)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(iddistribuidoraTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1089, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addComponent(AgregarAFactura)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1089, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(metodoPagoTXT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(31, 31, 31))
+                        .addContainerGap()
+                        .addComponent(metodoPagoTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 1472, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -428,81 +450,92 @@ public class prueba extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel11)
-                        .addGap(31, 31, 31)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel14)
+                                    .addComponent(idlibroTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(nuevoLibroBTN))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(tituloTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel6)
+                                    .addComponent(isbnTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel8)
+                                    .addComponent(numeroSerieTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel9)
+                                    .addComponent(numeroDePaginasTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(26, 26, 26)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel10)
+                                    .addComponent(precioReferencialTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(26, 26, 26)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(anhoPublicacionTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(288, 288, 288)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel7)
+                                    .addComponent(iddistribuidoraTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(numerofolioTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel12)
                             .addComponent(idEditorialTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(agregarEditorialALibroBTN)
-                            .addComponent(jButton1))
+                            .addComponent(agregarEditorialALibroBTN))
                         .addGap(2, 2, 2)
                         .addComponent(editorialLBL)
-                        .addGap(6, 6, 6)
+                        .addGap(7, 7, 7)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(idAutorTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(agregarAutorALibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2))
+                            .addComponent(agregarAutorALibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(nombreAutorLBL)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(categoriaALibroTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(agregarCategoriaALibroBTN)
-                            .addComponent(jButton3))
+                            .addComponent(agregarCategoriaALibroBTN))
                         .addGap(1, 1, 1)
                         .addComponent(categoriasLBL)
-                        .addGap(18, 18, 18)
+                        .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(idiomaLibroTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(agregarIdiomaALibroBTN)
-                                .addComponent(jButton4)))
+                                .addComponent(ididiomaLibroTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(agregarIdiomaALibroBTN)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(idiomasLBL)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(confirmarlibrofacturaBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(tituloTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(isbnTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(numeroSerieTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(numeroDePaginasTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(26, 26, 26)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(precioReferencialTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(26, 26, 26)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(anhoPublicacionTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(AgregarAFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(eliminarLibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(editarLibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(editarLibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(eliminarLibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(26, 26, 26)
+                        .addGap(8, 8, 8)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addComponent(metodoPagoTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -511,37 +544,67 @@ public class prueba extends javax.swing.JFrame {
 
     private void agregarAutorALibroBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarAutorALibroBTNActionPerformed
         // TODO add your handling code here:
-        Autor a = new Autor();
-        String stringvacio = "";
+        // Este metodo agregara un autor al arraylist de listadistribuidores factura
+        //Se inicializa un objeto de autor
+        LibroAutorEnlace a = new LibroAutorEnlace();
+        Autor autor = new Autor();
+        //variable contenedora del id Autor y id libro
         int id_autor;
+        int id_libro;
+        String nombre;
+        String apellido;
+        String autores = "";
+        //Se obtiene la variable del formulario
+        id_libro = Integer.parseInt(idlibroTXT.getText());
         id_autor = Integer.parseInt(idAutorTXT.getText());
-        String query = "SELECT `id_autor`, `nombre`, `apellido_pat`, `apellido_mat` FROM `autor` WHERE `id_autor`=" + id_autor;
-        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
-        a = manager.executeQueryConsultaAutor(query);
-        listaAutorLibro.add(a);
-        nombreAutorLBL.setText(stringvacio);
+        a.setId_autor(id_autor);
+        a.setId_libro(id_libro);
+        //Se hace la query que llama al autor requerido
+        //Se inicializa el objeto manager con lel pool de conexion
+        //ySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
+        //el objeto de autor es igual a la consulta ejecutada
+
+        //Se agrega el objeto A la lista de autores de la factura
+        listaAutorLibroEnlaceFactura.add(a);
         for (int i = 0; i < listaAutorLibro.size(); i++) {
-            nombreAutorLBL.setText(nombreAutorLBL.getText() + " " + listaAutorLibro.get(i).getNombre() + " " + listaAutorLibro.get(i).getAp_pat());
+            if (listaAutorLibro.get(i).getId_autor() == id_autor) {
+                nombre = listaAutorLibro.get(i).getNombre();
+                apellido = listaAutorLibro.get(i).getAp_pat();
+                autores = autores.concat(nombre + " " + apellido);
+            }
         }
+        System.out.println(autores);
+        nombreAutorLBL.setText(autores);
+        mostrarTablaFactura();
+
 
     }//GEN-LAST:event_agregarAutorALibroBTNActionPerformed
 
     private void agregarCategoriaALibroBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarCategoriaALibroBTNActionPerformed
         // TODO add your handling code here:
-        //Nuevo comentario Xd
-        //comentario aun mas nuevo
-        Categoria a = new Categoria();
-        String stringvacio = "";
+
+        CategoriaLibroEnlace a = new CategoriaLibroEnlace();
+
+        int id_libro;
         int id_categoria;
+        String nombre = "";
+
+        id_libro = Integer.parseInt(idlibroTXT.getText());
         id_categoria = Integer.parseInt(categoriaALibroTXT.getText());
-        String query = "SELECT `id_cat`, `nom_cat` FROM `categorias` WHERE `id_cat`=" + id_categoria;
-        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
-        a = manager.executeQueryConsultaCategoria(query);
-        listaCategoriaLibro.add(a);
-        categoriasLBL.setText(stringvacio);
-        for (int i = 0; i < listaAutorLibro.size(); i++) {
-            categoriasLBL.setText(categoriasLBL.getText() + " " + listaCategoriaLibro.get(i).getNom_cat() + " ");
+//        String query = "SELECT `id_cat`, `nom_cat` FROM `categorias` WHERE `id_cat`=" + id_categoria;
+//        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
+        a.setId_cat(id_categoria);
+        a.setId_libro(id_libro);
+        listaCategoriaLibroEnlaceFactura.add(a);
+
+        for (int i = 0; i < listaCategoriaLibro.size(); i++) {
+            if (listaCategoriaLibro.get(i).getId_cat() == a.getId_cat()) {
+                nombre = nombre.concat(listaCategoriaLibro.get(i).getNom_cat());
+
+            }
         }
+        categoriasLBL.setText(nombre);
+        mostrarTablaFactura();
 
 
     }//GEN-LAST:event_agregarCategoriaALibroBTNActionPerformed
@@ -575,81 +638,78 @@ public class prueba extends javax.swing.JFrame {
 
     private void agregarEditorialALibroBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarEditorialALibroBTNActionPerformed
         // TODO add your handling code here:
+
         Editorial a = new Editorial();
+        Libro libro = new Libro();
         String stringvacio = "";
         int id_editorial;
+        int id_libro;
+        editorialLBL.setText(stringvacio);
+        System.out.println(a.getNom_editorial());
+
         id_editorial = Integer.parseInt(idEditorialTXT.getText());
         String query = "SELECT `id_editorial`, `nom_editorial` FROM `editorial` WHERE `id_editorial`=" + id_editorial;
         MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
         a = manager.executeQueryConsultaEditorial(query);
-        listaEditorialLibro.add(a);
+        //Debo de agregar la editorial al objeto libro factura
+        //editoria
+        id_libro = Integer.parseInt(idlibroTXT.getText());
+        libro.setId_libro(id_libro);
+        libro.setId_editorial(a.getId_editorial());
         editorialLBL.setText(stringvacio);
-        System.out.println(a.toString());
-        for (int i = 0; i < listaEditorialLibro.size(); i++) {
-            System.out.println(listaEditorialLibro.get(i).getNom_editorial());
-            editorialLBL.setText(listaEditorialLibro.get(i).getNom_editorial());
+        System.out.println(a.getNom_editorial());
+
+        for (int i = 0; i < listaLibroFactura.size(); i++) {
+            System.out.println("Comparando id libro de la lista de factura :" + listaLibroFactura.get(i).getId_libro() + "Con :" + libro.getId_libro());
+            if (listaLibroFactura.get(i).getId_libro() == libro.getId_libro()) {
+                System.out.println("Cambiando la lista libro factura: " + id_libro);
+                listaLibroFactura.get(i).setId_editorial(id_editorial);
+                System.out.println("Cambiando la lista libro factura: " + listaLibroFactura.get(i).getId_editorial() + "id libro" + listaLibroFactura.get(i).getId_libro());
+                editorialLBL.setText(a.getNom_editorial());
+            }
+
         }
+        mostrarTablaFactura();
 
 
     }//GEN-LAST:event_agregarEditorialALibroBTNActionPerformed
 
     private void agregarIdiomaALibroBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarIdiomaALibroBTNActionPerformed
         // TODO add your handling code here:
-        Idioma a = new Idioma();
-        String stringvacio = "";
+
+        IdiomaLibroEnlace a = new IdiomaLibroEnlace();
+        String idioma = "";
+        int id_libro;
         int id_idioma;
-        id_idioma = Integer.parseInt(idiomaLibroTXT.getText());
-        String query = "SELECT `id_idioma`, `nom_idioma` FROM `idiomas` WHERE `id_idioma`=" + id_idioma;
-        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
-        a = manager.executeQueryConsultaIdioma(query);
-        listaIdiomaLibro.add(a);
-        idiomasLBL.setText(stringvacio);
-        System.out.println(a.toString());
+
+        id_libro = Integer.parseInt(idlibroTXT.getText());
+        id_idioma = Integer.parseInt(ididiomaLibroTXT.getText());
+
+        a.setId_idioma(id_idioma);
+        a.setId_libro(id_libro);
+        listaIdiomaLibroEnlaceFactura.add(a);
         for (int i = 0; i < listaIdiomaLibro.size(); i++) {
+            if (listaCategoriaLibro.get(i).getId_cat() == a.getId_idioma()) {
+                idioma = idioma.concat(listaCategoriaLibro.get(i).getNom_cat());
 
-            idiomasLBL.setText(listaIdiomaLibro.get(i).getNom_idioma());
+            }
         }
-
-    }//GEN-LAST:event_agregarIdiomaALibroBTNActionPerformed
-
-    private void idiomaLibroTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idiomaLibroTXTActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_idiomaLibroTXTActionPerformed
-
-    private void AgregarAFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarAFacturaActionPerformed
-        // TODO add your handling code here:
-
-        limpiarTabla();
-        Libro l = new Libro();
-
-        for (int i = 0; i < listaEditorialLibro.size(); i++) {
-            l.setId_editorial(listaEditorialLibro.get(i).getId_editorial());
-        }
-
-        int num_serie = Integer.parseInt(numeroSerieTXT.getText());
-        int num_pag = Integer.parseInt(numeroDePaginasTXT.getText());
-        String isbn = isbnTXT.getText();
-        String titulo = tituloTXT.getText();
-        int precio_ref = Integer.parseInt(precioReferencialTXT.getText());
-        int anho_publ = Integer.parseInt(anhoPublicacionTXT.getText());
-        int estado = 1;
-
-        l.setNum_pag(num_pag);
-        l.setAnho_publ(anho_publ);
-        l.setTitulo(titulo);
-        l.setNum_serie(num_serie);
-        l.setIsbn(isbn);
-        l.setPrecio_ref(precio_ref);
-        l.setEstado(estado);
-
-        l.agregarLibro(l.getId_editorial(), num_serie, num_pag, isbn, titulo, precio_ref, anho_publ, estado);
-
-        listaLibroFactura.add(l);
-
+        idiomasLBL.setText(idioma);
         mostrarTablaFactura();
 
 
-    }//GEN-LAST:event_AgregarAFacturaActionPerformed
+    }//GEN-LAST:event_agregarIdiomaALibroBTNActionPerformed
+
+    private void ididiomaLibroTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ididiomaLibroTXTActionPerformed
+
+    }//GEN-LAST:event_ididiomaLibroTXTActionPerformed
+
+    private void confirmarlibrofacturaBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarlibrofacturaBTNActionPerformed
+       nuevoLibroBTN.setEnabled(true);
+       
+        
+
+    }//GEN-LAST:event_confirmarlibrofacturaBTNActionPerformed
 
     public void mostrarTablaFactura() {
         //Limpiamos las listas que contienen todas los datos
@@ -658,7 +718,7 @@ public class prueba extends javax.swing.JFrame {
         listaCategoriaLibro.removeAll(listaCategoriaLibro);
         listaIdiomaLibro.removeAll(listaIdiomaLibro);
         listaLibro.removeAll(listaLibro);
-        listaLibroFactura.removeAll(listaLibroFactura);
+
         //Se llenan las listas
         MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
         manager.executeQueryConsultaLLenaTablaAutores(listaAutorLibro);
@@ -669,37 +729,119 @@ public class prueba extends javax.swing.JFrame {
         manager.executeQueryConsultaLLenaListaCategoriaLibroEnlace(listaCategoriaLibroEnlace);
         manager.executeQueryConsultaLLenaListaIdiomaLibroEnlace(listaIdiomaLibroEnlace);
         manager.executeQueryConsultaLLenaListaLibroAutorEnlace(listaAutorLibroEnlace);
+        //Creamos el String[] que contiene las columnas
+        String[] columnas = {"Id Libro", "Editorial", "Autor", "Categorias", "Idioma", "Titulo", "ISBN", "Numero de Serie", "Numero de Paginas", "Precio Referencial", "Valor sin IVA", "Valor con IVA", "Distribuidora"};
         //Se define la matriz que contiene la informacion
-        String matriz[][] = new String[listaLibroFactura.size()][5];
+        String matriz[][] = new String[listaLibro.size()][13];
         //Se definen las variables auxiliares que contendrán la Editorial, Autor, Categoria e Idioma 
         String editorial = "";
         String autor = "";
         String categoria = "";
         String idioma = "";
-        //Se definen las columnas de la tabla
-        String[] columnas = {
-            "Id Libro", "Editorial", "Autor", "Categoria", "Idioma", "Titulo", "ISBN", "Numero de serie", "Num. de Paginas", "Precio Referencial"
-        };
+        System.out.println("tamaño de la lista libro factura"+listaLibroFactura.size());
         for (int i = 0; i < listaLibroFactura.size(); i++) {
+            Libro libro = new Libro();
+            libro = listaLibroFactura.get(i);
+            System.out.println("Id libro Actual"+listaLibroFactura.get(i).getId_libro());
 
             String precio_ref = Integer.toString(listaLibroFactura.get(i).getPrecio_ref());
             String precio_iva = precio_ref + Double.toString(listaLibroFactura.get(i).getPrecio_ref() * 0.19);
+            System.out.println("Agregando Id libro ->" + listaLibroFactura.get(i).getId_libro());
+            matriz[i][0] = Integer.toString(listaLibroFactura.get(i).getId_libro());
 
-            matriz[i][0] = listaLibroFactura.get(i).getTitulo();
-            matriz[i][1] = listaAutorLibro.get(i).getNombre() + " " + listaAutorLibro.get(i).getAp_pat();
-            matriz[i][2] = precio_ref;
-            matriz[i][3] = precio_iva;
-            matriz[i][4] = listaEditorialLibro.get(i).getNom_editorial();
-
-        }
-        facturaTBL1.setModel(new javax.swing.table.DefaultTableModel(
-                matriz,
-                new String[]{
-                    "Titulo", "Autor", "Valor Sin IVA", "Valor con IVA", "Distribuidira"
+            System.out.println("Agregando Id editorial ->" + listaLibroFactura.get(i).getId_editorial());
+            for (int h = 0; h < listaEditorialLibro.size(); h++) {
+                if (listaLibroFactura.get(i).getId_editorial() == listaEditorialLibro.get(h).getId_editorial()) {
+                    editorial = editorial.concat(listaEditorialLibro.get(h).getNom_editorial());
                 }
-        ));
+            }
+            matriz[i][1] = editorial;
+
+            System.out.println("Tamaño de la lista autorenlacefactura :" + listaAutorLibroEnlaceFactura.size());
+            for (int j = 0; j < listaAutorLibroEnlaceFactura.size(); j++) {
+                System.out.println("Fuera del For:");
+                System.out.println("Id libro a comparar ->" + libro.getId_libro() + "ii libro en lista enlace" + listaAutorLibroEnlaceFactura.get(i).getId_libro());
+                if (libro.getId_libro() == listaAutorLibroEnlaceFactura.get(j).getId_libro()) {
+
+                    int idautor = listaAutorLibroEnlaceFactura.get(j).getId_autor();
+                    System.out.println("Id autor obtenido desde el if :" + idautor);
+                    //Saqué la id del autor, hay que compararla con la id de la lista autores libros.
+                    //Haré un for con toda la lista de autores y por cada autor que sea igual al id autor
+                    //Se agregan y se concatenan en la tabla
+                    //succes!!
+
+                    for (int n = 0; n < listaAutorLibro.size(); n++) {
+                        System.out.println("Id autor a comparar :" + listaAutorLibro.get(n).getId_autor());
+                        if (idautor == listaAutorLibro.get(n).getId_autor()) {
+
+                            System.out.println(listaAutorLibro.get(n).getNombre());
+                            String nombre = listaAutorLibro.get(j).getNombre();
+                            String apellido = listaAutorLibro.get(j).getAp_pat();
+                            autor = autor.concat(nombre + " " + apellido);
+                            System.out.println(autor);
+                        }
+
+                    }
+
+                }
+
+            }
+            matriz[i][2] = autor;
+            //Se defineagregan las categorias...
+            System.out.println();
+            System.out.println("Tamaño de la lista de categoria libroenlace" + listaCategoriaLibroEnlaceFactura.size());
+            for (int k = 0; k < listaCategoriaLibroEnlaceFactura.size(); k++) {
+                System.out.println("ID de libro actual:->" + libro.getId_libro() + "id de libro a comparar:" + listaCategoriaLibroEnlaceFactura.get(k).getId_libro());
+
+                if (libro.getId_libro() == listaCategoriaLibroEnlaceFactura.get(k).getId_libro()) {
+                    int idcat = listaCategoriaLibroEnlaceFactura.get(k).getId_cat();
+                    System.out.println("Id de categoria a comparar: " + idcat);
+
+                    for (int l = 0; l < listaCategoriaLibro.size(); l++) {
+                        System.out.println("Id categoria obtenido desde la lista" + listaCategoriaLibro.get(l).getId_cat());
+                        if (idcat == listaCategoriaLibro.get(l).getId_cat()) {
+                            System.out.println("Categoria encontrada: " + listaCategoriaLibro.get(l).getNom_cat());
+                            categoria = categoria.concat(listaCategoriaLibro.get(l).getNom_cat());
+                            System.out.println(categoria);
+                        }
+
+                    }
+
+                }
+            }
+            matriz[i][3] = categoria;
+
+            //Mas de lo mismo con idiomas
+            System.out.println("Tamaño de la lista de idioma libroenlace" + listaIdiomaLibroEnlaceFactura.size());
+            for (int m = 0; m < listaIdiomaLibroEnlaceFactura.size(); m++) {
+
+                if (libro.getId_libro() == listaIdiomaLibroEnlaceFactura.get(m).getId_libro()) {
+                    int ididioma = listaIdiomaLibroEnlaceFactura.get(m).getId_idioma();
+
+                    for (int l = 0; l < listaIdiomaLibro.size(); l++) {
+                        if (ididioma == listaIdiomaLibro.get(l).getId_idioma()) {
+                            idioma = idioma.concat(listaIdiomaLibro.get(l).getNom_idioma());
+                            System.out.println(idioma);
+                        }
+                    }
+
+                }
+            }
+            matriz[i][4] = idioma;
+            matriz[i][5] = listaLibroFactura.get(i).getTitulo();
+            matriz[i][6] = listaLibroFactura.get(i).getIsbn();
+            matriz[i][7] = Integer.toString(listaLibroFactura.get(i).getNum_serie());
+            matriz[i][8] = Integer.toString(listaLibroFactura.get(i).getNum_pag());
+            matriz[i][9] = precio_ref;
+            matriz[i][10] = precio_ref;
+            matriz[i][11] = precio_iva;
+            matriz[i][12] = "Distribuidora";
+        }
 
         //Creamos el Tablemodel
+        DefaultTableModel dtm = new DefaultTableModel(matriz, columnas);
+
+        nuevafacturaTBL.setModel(dtm);
     }
     private void metodoPagoTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_metodoPagoTXTActionPerformed
         int seleccion = JOptionPane.showOptionDialog(null, "Seleccione una opcion",
@@ -823,29 +965,57 @@ public class prueba extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField1KeyTyped
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void iddistribuidoraTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iddistribuidoraTXTActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_iddistribuidoraTXTActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void nuevoLibroBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoLibroBTNActionPerformed
+        //Necesito llenar el arraylist de libros
+        //Inicializo el objeto de manager sql para obtenerlo
+        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
+        //llenar el arraylist de libros
+        manager.executeQueryConsultaLLenaTablaLibro(listaLibro);
+        //Obtengo el ultimo indice de la lista
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        int ultimolibro = listaLibro.get(listaLibro.size() - 1).getId_libro() + contnuevolibro;
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+        System.out.println("Ultimo libro ->" + ultimolibro);
+        Libro libro = new Libro();
+        libro.setId_libro(ultimolibro);
+        int num_serie = Integer.parseInt(numeroSerieTXT.getText());
+        int num_pag = Integer.parseInt(numeroDePaginasTXT.getText());
+        String isbn = isbnTXT.getText();
+        String titulo = tituloTXT.getText();
+        int precio_ref = Integer.parseInt(precioReferencialTXT.getText());
+        int anho_publ = Integer.parseInt(anhoPublicacionTXT.getText());
+        int estado = 1;
+        //Llenamos libro
+       
+        libro.setNum_pag(num_pag);
+        libro.setAnho_publ(anho_publ);
+        libro.setTitulo(titulo);
+        libro.setNum_serie(num_serie);
+        libro.setIsbn(isbn);
+        libro.setPrecio_ref(precio_ref);
+        libro.setEstado(estado);
+        System.out.println("id:"+libro.getId_libro()+"titulo :"+libro.getTitulo()+"anho publicacion"+libro.getAnho_publ());
+        idlibroTXT.setText("");
+        idlibroTXT.setText(Integer.toString(libro.getId_libro()));
+        idlibroTXT.setEditable(false);
+        listaLibroFactura.add(libro);
+        contnuevolibro++;
+        nuevoLibroBTN.setEnabled(false);
+        mostrarTablaFactura();
+
+    }//GEN-LAST:event_nuevoLibroBTNActionPerformed
     public void mostrarTabla() {
+        System.out.println("Mostrando Tabla de Libros");
         //Limpiamos las listas que contienen todas los datos
         listaAutorLibro.removeAll(listaAutorLibro);
         listaEditorialLibro.removeAll(listaEditorialLibro);
         listaCategoriaLibro.removeAll(listaCategoriaLibro);
         listaIdiomaLibro.removeAll(listaIdiomaLibro);
         listaLibro.removeAll(listaLibro);
-        listaLibroFactura.removeAll(listaLibroFactura);
         listaCategoriaLibroEnlace.removeAll(listaCategoriaLibroEnlace);
         listaAutorLibroEnlace.removeAll(listaAutorLibroEnlace);
         listaIdiomaLibroEnlace.removeAll(listaIdiomaLibroEnlace);
@@ -860,8 +1030,8 @@ public class prueba extends javax.swing.JFrame {
         manager.executeQueryConsultaLLenaListaIdiomaLibroEnlace(listaIdiomaLibroEnlace);
         manager.executeQueryConsultaLLenaListaLibroAutorEnlace(listaAutorLibroEnlace);
         //Se define la matriz que contiene la informacion
-        String matriz[][] = new String[listaLibroFactura.size()][10];
-         //Se definen las columnas de la tabla
+        String matriz[][] = new String[listaLibro.size()][10];
+        //Se definen las columnas de la tabla
         String[] columnas = {"Id Libro", "Editorial", "Autor", "Categoria", "Idioma", "Titulo", "ISBN", "Numero de serie", "Num. de Paginas", "Precio Referencial"};
         //Este iterador llena la matriz que contiene los datos
 
@@ -871,64 +1041,113 @@ public class prueba extends javax.swing.JFrame {
             String autor = "";
             String categoria = "";
             String idioma = "";
-           //Se definen variables auxiliares
+            //Se definen variables auxiliares
+
             int idlibroaux;
             int idedaux;
+            System.out.println(listaLibro.get(i).getId_libro());
             idlibroaux = listaLibro.get(i).getId_libro();
-            idedaux= listaLibro.get(i).getId_editorial();
+            idedaux = listaLibro.get(i).getId_editorial();
             //Se muestra por pantalla la vuelta el id actual y el id de editorial
-            System.out.println("Vuelta: "+i);
-            System.out.println("Id del cliente actual : "+idlibroaux);
-            System.out.println("Id de editorial de libro:"+idedaux);
+            System.out.println("Vuelta: " + i);
+            System.out.println("Id del libro actual : " + idlibroaux);
+            System.out.println("Id de editorial de libro:" + idedaux);
             String idlibro = Integer.toString(listaLibro.get(i).getId_libro());
             String num_serie = Integer.toString(listaLibro.get(i).getNum_serie());
             String num_pag = Integer.toString(listaLibro.get(i).getNum_pag());
             String precio_ref = Integer.toString(listaLibro.get(i).getPrecio_ref());
             matriz[i][0] = idlibro;
+
+            System.out.println("Iniciando carga de editoriales");
+            System.out.println("Tamaño de la lista de editoriales: " + listaEditorialLibro.size());
+            //Manejo de Editoriales, los cuales se obtienen desde lista editorial 
             for (int k = 0; k < listaEditorialLibro.size(); k++) {
-                System.out.println("Editoriales -> id editorial de libro a comparar:" +listaEditorialLibro.get(k).getId_editorial()+" id actual:"+idedaux);
-                if (idedaux == listaEditorialLibro.get(k).getId_editorial()){
-                    editorial= editorial.concat(listaEditorialLibro.get(k).getNom_editorial());
-                
-                }           
-                
+
+                System.out.println("Editoriales ->id actual:" + listaEditorialLibro.get(k).getId_editorial() + " id editorial de libro a comparar: " + idedaux);
+
+                if (listaEditorialLibro.get(k).getId_editorial() == idedaux) {
+                    System.out.println("Editorial Agregada: " + listaEditorialLibro.get(k).getNom_editorial());
+                    editorial = editorial.concat(listaEditorialLibro.get(k).getNom_editorial());
+                    System.out.println(editorial);
+
+                }
+
             }
+
             matriz[i][1] = editorial;
-            for (int j = 0; j < listaAutorLibro.size(); j++) {
-                System.out.println("Autores -> id libro a comparar:" +listaAutorLibro.get(j).getId_autor()+" id actual:"+idlibroaux);
-                if (idlibroaux == listaAutorLibro.get(j).getId_autor()) {
-                    autor = autor.concat(listaAutorLibro.get(j).getNombre() + " " + listaAutorLibro.get(j).getAp_pat());
+
+            System.out.println("Iniciando carga de autores");
+            System.out.println("Tamaño del array de listalibroenlace:" + listaAutorLibroEnlace.size());
+            for (int j = 0; j < listaAutorLibroEnlace.size(); j++) {
+
+                System.out.println("Autores ->id actual: " + listaAutorLibroEnlace.get(j).getId_autor() + " id libro a comparar:" + idlibroaux);
+                if (listaAutorLibroEnlace.get(j).getId_libro() == idlibroaux) {
+                    int idautor = listaAutorLibroEnlace.get(j).getId_autor();
+
+                    //Saqué la id del autor, hay que compararla con la id de la lista autores libros.
+                    //Haré un for con toda la lista de autores y por cada autor que sea igual al id autor
+                    //Se agregan y se concatenan en la tabla
+                    //succes!!
+                    for (int n = 0; n < listaAutorLibro.size(); n++) {
+                        if (idautor == listaAutorLibro.get(n).getId_autor()) {
+                            System.out.println(listaAutorLibro.get(n).getNombre());
+                            String nombre = listaAutorLibro.get(j).getNombre();
+                            String apellido = listaAutorLibro.get(j).getAp_pat();
+                            autor = autor.concat(nombre + " " + apellido);
+                            System.out.println(autor);
+                        }
+
+                    }
+
                 }
             }
             matriz[i][2] = autor;
+            System.out.println("Iniciando carga de Categorias");
             for (int l = 0; l < listaCategoriaLibro.size(); l++) {
-               System.out.println("Categoria -> id categoria libro a comparar:" +listaCategoriaLibro.get(l).getId_cat()+" id actual:"+idlibroaux);
-                if (idlibroaux == listaCategoriaLibro.get(l).getId_cat()) {
-                    categoria = categoria.concat(listaCategoriaLibro.get(l).getNom_cat());
-                    
+                System.out.println("Categoria -> id categoria libro a comparar:" + listaCategoriaLibro.get(l).getId_cat() + " id actual:" + idlibroaux);
+                if (idlibroaux == listaCategoriaLibroEnlace.get(l).getId_libro()) {
+
+                    //Sacamos la id de la categoria lo que se compara con la lista de categoria
+                    int idcategoria = listaCategoriaLibroEnlace.get(l).getId_cat();
+                    for (int m = 0; m < listaCategoriaLibro.size(); m++) {
+                        if (idcategoria == listaCategoriaLibroEnlace.get(m).getId_cat()) {
+                            System.out.println(listaCategoriaLibro.get(m).getNom_cat());
+                            categoria = categoria.concat(listaCategoriaLibro.get(m).getNom_cat());
+                            System.out.println(categoria);
+                        }
+
+                    }
+
                 }
-                
+
             }
             matriz[i][3] = categoria;
-            for (int m = 0; m < listaIdiomaLibro.size(); m++) {
-                System.out.println("Idioma -> id libro a comparar: "+idlibroaux+", id del idioma a comparar : "+listaIdiomaLibroEnlace.get(m).getId_libro());
-                if (idlibroaux==listaIdiomaLibroEnlace.get(m).getId_libro()) {
+            for (int p = 0; p < listaIdiomaLibro.size(); p++) {
+                System.out.println("Idioma -> id libro a comparar: " + idlibroaux + ", id del idioma a comparar : " + listaIdiomaLibroEnlace.get(p).getId_libro());
+                if (idlibroaux == listaIdiomaLibroEnlace.get(p).getId_libro()) {
                     //Debo de concatenar el nombre a idioma String, pero primero debo de tener el id que lo sacaré de id libro
                     //
-                    idioma = idioma.concat(listaIdiomaLibro.get(idlibroaux).getNom_idioma());
-                    
+                    int ididioma = listaIdiomaLibroEnlace.get(p).getId_libro();
+                    for (int q = 0; q < listaIdiomaLibro.size(); q++) {
+                        if (ididioma == listaIdiomaLibro.get(q).getId_idioma()) {
+                            System.out.println("Idioma: " + listaIdiomaLibro.get(q).getNom_idioma());
+                            idioma = idioma.concat(listaIdiomaLibro.get(q).getNom_idioma());
+                            System.out.println(idioma);
+                        }
+                    }
+
                 }
             }
             matriz[i][4] = idioma;
-            matriz[i][5] = listaLibroFactura.get(i).getTitulo();
-            matriz[i][6] = listaLibroFactura.get(i).getIsbn();
+            matriz[i][5] = listaLibro.get(i).getTitulo();
+            matriz[i][6] = listaLibro.get(i).getIsbn();
             matriz[i][7] = num_serie;
             matriz[i][8] = num_pag;
             matriz[i][9] = precio_ref;
 
         }
         DefaultTableModel dtm = new DefaultTableModel(matriz, columnas);
-        facturaTBL.setModel(dtm);
+        libros.setModel(dtm);
 
     }
 
@@ -983,7 +1202,6 @@ public class prueba extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton AgregarAFactura;
     private javax.swing.JButton agregarAutorALibroBTN;
     private javax.swing.JButton agregarCategoriaALibroBTN;
     private javax.swing.JButton agregarCategoriaBTN;
@@ -995,40 +1213,42 @@ public class prueba extends javax.swing.JFrame {
     private javax.swing.JTextField anhoPublicacionTXT;
     private javax.swing.JTextField categoriaALibroTXT;
     private javax.swing.JLabel categoriasLBL;
+    private javax.swing.JButton confirmarlibrofacturaBTN;
     private javax.swing.JButton distribuidoresBTN;
     private javax.swing.JButton editarLibroBTN;
     private javax.swing.JLabel editorialLBL;
     private javax.swing.JButton eliminarLibroBTN;
-    public javax.swing.JTable facturaTBL;
-    private javax.swing.JTable facturaTBL1;
     private javax.swing.JTextField idAutorTXT;
     private javax.swing.JTextField idEditorialTXT;
-    private javax.swing.JTextField idiomaLibroTXT;
+    private javax.swing.JTextField iddistribuidoraTXT;
+    private javax.swing.JTextField ididiomaLibroTXT;
     private javax.swing.JLabel idiomasLBL;
+    private javax.swing.JTextField idlibroTXT;
     private javax.swing.JTextField isbnTXT;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
+    public javax.swing.JTable libros;
     private javax.swing.JButton metodoPagoTXT;
     private javax.swing.JLabel nombreAutorLBL;
+    private javax.swing.JTable nuevafacturaTBL;
+    private javax.swing.JButton nuevoLibroBTN;
     private javax.swing.JTextField numeroDePaginasTXT;
     private javax.swing.JTextField numeroSerieTXT;
+    private javax.swing.JTextField numerofolioTXT;
     private javax.swing.JTextField precioReferencialTXT;
     private javax.swing.JTextField tituloTXT;
     private javax.swing.JButton verFactura;

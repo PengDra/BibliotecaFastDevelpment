@@ -403,7 +403,7 @@ public class MySQLManager {
 
     public ArrayList<Editorial> executeQueryConsultaLLenaTablaEditoriales(ArrayList<Editorial> listaEditoriales) {
         System.out.println("ESTOY ENTRANDO Al METODO");
-        String query = "SELECT * FROM `distribuidores`";
+        String query = "SELECT * FROM `editorial`";
         Connection connection = createConnection();
         Statement statement = null;
         ResultSet set = null;
@@ -1138,6 +1138,7 @@ public class MySQLManager {
         }
         return null;
     }
+    
     
     
     

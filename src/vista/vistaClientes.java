@@ -9,7 +9,7 @@ import controlador.MySQLManager;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableColumnModel;
+
 import javax.swing.table.DefaultTableModel;
 import modelo.Cliente;
 import modelo.CorreosClientes;
@@ -475,9 +475,6 @@ public class vistaClientes extends javax.swing.JFrame {
             for (int j = 0; j < listaDireccionesClientes.size(); j++) {
                 //si el idaux es = al id de clientes se concatena la direccion al string mantenedor
                 System.out.println("Direcciones -> id cliente a comparar:" +listaDireccionesClientes.get(j).getId_cliente()  + " , id actual:" + idcliAux);
-             
-                
-
                 if (idcliAux == listaDireccionesClientes.get(j).getId_cliente()) {
                     direcciones= direcciones.concat(listaDireccionesClientes.get(j).getDirecciones() + " , ");
                     System.out.println(direcciones);

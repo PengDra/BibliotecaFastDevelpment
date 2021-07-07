@@ -873,7 +873,8 @@ public class prueba extends javax.swing.JFrame {
         }
         precio_total = precio_neto+precio_iva;
         factura.setFolio(folio);
-        factura.setCosto_iva(precio_iva);
+        int costo_iva= ;
+        factura.setCosto_iva();
       
         
         

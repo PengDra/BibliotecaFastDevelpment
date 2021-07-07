@@ -12,10 +12,10 @@ package modelo;
 public class Factura {
     private int id_factura;
     private int folio;
-    private int precio_neto;
-    private int precio_iva;
-    private int costo_iva;
-    private String fecha_compra;
+    private double precio_neto;
+    private double precio_iva;
+    private double costo_iva;
+    private int fecha_compra;
     private int hora_compra;
     private int id_dist;
     private int metodo_pago;
@@ -36,7 +36,7 @@ public class Factura {
         this.folio = folio;
     }
 
-    public int getPrecio_neto() {
+    public double getPrecio_neto() {
         return precio_neto;
     }
 
@@ -44,7 +44,7 @@ public class Factura {
         this.precio_neto = precio_neto;
     }
 
-    public int getPrecio_iva() {
+    public double getPrecio_iva() {
         return precio_iva;
     }
 
@@ -52,7 +52,7 @@ public class Factura {
         this.precio_iva = precio_iva;
     }
 
-    public int getCosto_iva() {
+    public double getCosto_iva() {
         return costo_iva;
     }
 
@@ -60,11 +60,11 @@ public class Factura {
         this.costo_iva = costo_iva;
     }
 
-    public String getFecha_compra() {
+    public int getFecha_compra() {
         return fecha_compra;
     }
 
-    public void setFecha_compra(String fecha_compra) {
+    public void setFecha_compra(int fecha_compra) {
         this.fecha_compra = fecha_compra;
     }
 

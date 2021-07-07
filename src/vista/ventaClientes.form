@@ -35,7 +35,7 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jScrollPane2" min="-2" pref="1100" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="30" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="comprarBTN" min="-2" pref="157" max="-2" attributes="0"/>
                           <Component id="verBoletasBTN" min="-2" pref="157" max="-2" attributes="0"/>
@@ -198,25 +198,43 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="idClienteVentaTXT">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="idClienteVentaTXTKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="idLibroVentaTXT">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="idLibroVentaTXTKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="idTrabajadorVentaTXT">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="idTrabajadorVentaTXTKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="agregarIdClienteBTN">
       <Properties>
         <Property name="text" type="java.lang.String" value="Agregar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="agregarIdClienteBTNActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="agregarIdLibroBTN">
       <Properties>
         <Property name="text" type="java.lang.String" value="Agregar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="agregarIdLibroBTNActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="agregarIdTrabajadorBTN">
       <Properties>
         <Property name="text" type="java.lang.String" value="Agregar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="agregarIdTrabajadorBTNActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>

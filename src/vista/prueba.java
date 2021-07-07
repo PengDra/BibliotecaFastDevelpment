@@ -50,7 +50,7 @@ public class prueba extends javax.swing.JFrame {
     ArrayList<CategoriaLibroEnlace> listaCategoriaLibroEnlaceFactura = new ArrayList<>();
     ArrayList<Distribuidor> listaDistribuidores = new ArrayList<>();
     ArrayList<Factura> listaFacturas = new ArrayList<>();
-    int contnuevolibro = 1;
+    int ultimolibroagregado = 0;
 
     public prueba() {
         initComponents();
@@ -355,23 +355,11 @@ public class prueba extends javax.swing.JFrame {
                                                 .addGap(130, 130, 130)
                                                 .addComponent(idAutorTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addGap(122, 122, 122)
-                                                .addComponent(nombreAutorLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(132, 132, 132)
-                                                .addComponent(idiomasLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(122, 122, 122)
-                                                .addComponent(categoriasLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jLabel4)
                                                 .addGap(25, 25, 25)
                                                 .addComponent(ididiomaLibroTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(26, 26, 26)
                                                 .addComponent(agregarIdiomaALibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(104, 104, 104)
-                                                .addComponent(editorialLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                                     .addComponent(jLabel14)
@@ -409,14 +397,25 @@ public class prueba extends javax.swing.JFrame {
                                                     .addComponent(tituloTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(isbnTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(numeroSerieTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(numeroDePaginasTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                                    .addComponent(numeroDePaginasTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(104, 104, 104)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(nombreAutorLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(editorialLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(editarLibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(56, 56, 56)
                                         .addComponent(eliminarLibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(67, 67, 67)
-                                        .addComponent(confirmarlibrofacturaBTN)))
+                                        .addComponent(confirmarlibrofacturaBTN))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(114, 114, 114)
+                                        .addComponent(categoriasLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(115, 115, 115)
+                                        .addComponent(idiomasLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(25, 25, 25)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -487,8 +486,8 @@ public class prueba extends javax.swing.JFrame {
                                     .addComponent(jLabel7)
                                     .addComponent(iddistribuidoraTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(numerofolioTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -507,21 +506,20 @@ public class prueba extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addComponent(idAutorTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(agregarAutorALibroBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(11, 11, 11)
                         .addComponent(nombreAutorLBL)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(categoriaALibroTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(agregarCategoriaALibroBTN))
-                        .addGap(1, 1, 1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(categoriasLBL)
-                        .addGap(17, 17, 17)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel4)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(ididiomaLibroTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(agregarIdiomaALibroBTN)))
+                            .addComponent(agregarIdiomaALibroBTN)
+                            .addComponent(ididiomaLibroTXT))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(idiomasLBL)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -533,7 +531,7 @@ public class prueba extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(8, 8, 8)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addComponent(metodoPagoTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -705,9 +703,8 @@ public class prueba extends javax.swing.JFrame {
     }//GEN-LAST:event_ididiomaLibroTXTActionPerformed
 
     private void confirmarlibrofacturaBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarlibrofacturaBTNActionPerformed
-       nuevoLibroBTN.setEnabled(true);
-       
-        
+        nuevoLibroBTN.setEnabled(true);
+
 
     }//GEN-LAST:event_confirmarlibrofacturaBTNActionPerformed
 
@@ -730,24 +727,35 @@ public class prueba extends javax.swing.JFrame {
         manager.executeQueryConsultaLLenaListaIdiomaLibroEnlace(listaIdiomaLibroEnlace);
         manager.executeQueryConsultaLLenaListaLibroAutorEnlace(listaAutorLibroEnlace);
         //Creamos el String[] que contiene las columnas
-        String[] columnas = {"Id Libro", "Editorial", "Autor", "Categorias", "Idioma", "Titulo", "ISBN", "Numero de Serie", "Numero de Paginas", "Precio Referencial", "Valor sin IVA", "Valor con IVA", "Distribuidora"};
+        String[] columnas = {"Id Libro", "Editorial", "Autor", "Categorias", "Idioma", "Titulo", "ISBN", "Numero de Serie", "Numero de Paginas", "Precio Referencial", "Valor IVA", "Valor con IVA"};
         //Se define la matriz que contiene la informacion
-        String matriz[][] = new String[listaLibro.size()][13];
+        String matriz[][] = new String[listaLibroFactura.size()][13];
         //Se definen las variables auxiliares que contendrán la Editorial, Autor, Categoria e Idioma 
         String editorial = "";
         String autor = "";
         String categoria = "";
         String idioma = "";
-        System.out.println("tamaño de la lista libro factura"+listaLibroFactura.size());
+        //int largolista=  listaLibroFactura.size();
+        //Tengo que determinar cual será el tamaño de la lista y por consecuente cual será el id del siguiente libro
+        //
+        //tengo que saber si el contador de libro nuevo está en 1 para poder decidir el tamaño de la lista que corresponda
+        int largolista;
+        System.out.println("Ultimo Libro agregado :" + ultimolibroagregado);
+        System.out.println("tamaño de la lista libro factura" + listaLibroFactura.size() + " contador nuevo libro");
+
         for (int i = 0; i < listaLibroFactura.size(); i++) {
             Libro libro = new Libro();
             libro = listaLibroFactura.get(i);
-            System.out.println("Id libro Actual"+listaLibroFactura.get(i).getId_libro());
+            System.out.println("Id libro Actual" + listaLibroFactura.get(i).getId_libro());
 
             String precio_ref = Integer.toString(listaLibroFactura.get(i).getPrecio_ref());
-            String precio_iva = precio_ref + Double.toString(listaLibroFactura.get(i).getPrecio_ref() * 0.19);
+
             System.out.println("Agregando Id libro ->" + listaLibroFactura.get(i).getId_libro());
-            matriz[i][0] = Integer.toString(listaLibroFactura.get(i).getId_libro());
+            String id_libro = Integer.toString(listaLibroFactura.get(i).getId_libro());
+            
+            String valor_iva = Double.toString(listaLibroFactura.get(i).getPrecio_ref() * 0.19);
+            String precio_iva = Double.toString(listaLibroFactura.get(i).getPrecio_ref() + listaLibroFactura.get(i).getPrecio_ref() * 0.19);
+            matriz[i][0] = id_libro;
 
             System.out.println("Agregando Id editorial ->" + listaLibroFactura.get(i).getId_editorial());
             for (int h = 0; h < listaEditorialLibro.size(); h++) {
@@ -787,6 +795,9 @@ public class prueba extends javax.swing.JFrame {
 
             }
             matriz[i][2] = autor;
+            //Que divertido es programar a las 3 am...
+            //y heme aqui demostrando que existo en 5 dimensiones, quiza cuantas mas hay?
+            //quizá en algun futuro cercano estaré hablando con una IA a travez de los comentarios de mis programas
             //Se defineagregan las categorias...
             System.out.println();
             System.out.println("Tamaño de la lista de categoria libroenlace" + listaCategoriaLibroEnlaceFactura.size());
@@ -833,17 +844,39 @@ public class prueba extends javax.swing.JFrame {
             matriz[i][7] = Integer.toString(listaLibroFactura.get(i).getNum_serie());
             matriz[i][8] = Integer.toString(listaLibroFactura.get(i).getNum_pag());
             matriz[i][9] = precio_ref;
-            matriz[i][10] = precio_ref;
+            matriz[i][10] = valor_iva;
             matriz[i][11] = precio_iva;
-            matriz[i][12] = "Distribuidora";
         }
 
         //Creamos el Tablemodel
         DefaultTableModel dtm = new DefaultTableModel(matriz, columnas);
 
         nuevafacturaTBL.setModel(dtm);
+
     }
     private void metodoPagoTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_metodoPagoTXTActionPerformed
+        
+        Factura factura = new Factura(); 
+        int id_distribuidor;
+        id_distribuidor = Integer.parseInt(iddistribuidoraTXT.getText());
+        factura.setId_dist(id_distribuidor);
+        int folio = Integer.parseInt(numerofolioTXT.getText());
+        double precio_total;
+        double precio_neto = 0;
+        double precio_iva = 0;
+        for (int i = 0; i < listaLibroFactura.size(); i++) {
+            precio_neto = precio_neto +listaLibroFactura.get(i).getPrecio_ref();
+        }
+        for (int i = 0; i < listaLibroFactura.size(); i++) {
+            precio_iva= precio_iva+listaLibroFactura.get(i).getPrecio_ref()*0.19;
+            
+        }
+        precio_total = precio_neto+precio_iva;
+        factura.setFolio(folio);
+        factura.setCosto_iva(precio_iva);
+      
+        
+        
         int seleccion = JOptionPane.showOptionDialog(null, "Seleccione una opcion",
                 "Selector de opciones", JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null,// null para icono por defecto.
@@ -976,12 +1009,23 @@ public class prueba extends javax.swing.JFrame {
         //llenar el arraylist de libros
         manager.executeQueryConsultaLLenaTablaLibro(listaLibro);
         //Obtengo el ultimo indice de la lista
+        int id_libro;
+        System.out.println("ultimo libro agregado  :" + ultimolibroagregado);
 
-        int ultimolibro = listaLibro.get(listaLibro.size() - 1).getId_libro() + contnuevolibro;
+        if (ultimolibroagregado == 0) {
+            int ultimolibro = listaLibro.get(listaLibro.size() - 1).getId_libro() + 1;
+            id_libro = ultimolibro;
+            ultimolibroagregado = ultimolibro;
+        } else {
+            id_libro = ultimolibroagregado;
 
-        System.out.println("Ultimo libro ->" + ultimolibro);
+        }
+
+        System.out.println("Ultimo libro ->" + ultimolibroagregado);
         Libro libro = new Libro();
-        libro.setId_libro(ultimolibro);
+        libro.setId_libro(id_libro);
+        ultimolibroagregado++;
+
         int num_serie = Integer.parseInt(numeroSerieTXT.getText());
         int num_pag = Integer.parseInt(numeroDePaginasTXT.getText());
         String isbn = isbnTXT.getText();
@@ -990,7 +1034,7 @@ public class prueba extends javax.swing.JFrame {
         int anho_publ = Integer.parseInt(anhoPublicacionTXT.getText());
         int estado = 1;
         //Llenamos libro
-       
+
         libro.setNum_pag(num_pag);
         libro.setAnho_publ(anho_publ);
         libro.setTitulo(titulo);
@@ -998,13 +1042,19 @@ public class prueba extends javax.swing.JFrame {
         libro.setIsbn(isbn);
         libro.setPrecio_ref(precio_ref);
         libro.setEstado(estado);
-        System.out.println("id:"+libro.getId_libro()+"titulo :"+libro.getTitulo()+"anho publicacion"+libro.getAnho_publ());
+        System.out.println("id:" + libro.getId_libro() + "titulo :" + libro.getTitulo() + "anho publicacion" + libro.getAnho_publ());
         idlibroTXT.setText("");
         idlibroTXT.setText(Integer.toString(libro.getId_libro()));
         idlibroTXT.setEditable(false);
         listaLibroFactura.add(libro);
-        contnuevolibro++;
+
         nuevoLibroBTN.setEnabled(false);
+        for (int i = 0; i < listaLibroFactura.size(); i++) {
+            System.out.println(listaLibroFactura.get(i).getTitulo());
+            System.out.println(listaLibroFactura.get(i).getId_libro());
+
+        }
+
         mostrarTablaFactura();
 
     }//GEN-LAST:event_nuevoLibroBTNActionPerformed

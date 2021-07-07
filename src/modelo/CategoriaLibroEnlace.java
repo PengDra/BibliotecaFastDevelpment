@@ -59,10 +59,6 @@ public class CategoriaLibroEnlace {
         manager.executeUpdate("INSERT INTO `categorias_enlace`( `id_cat`, `id_libro`) VALUES ("+id_cat+","+id_libro+")");
 
     }
-    
-    
-    
-    
-    
+     
     
 }

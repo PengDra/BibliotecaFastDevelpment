@@ -944,7 +944,7 @@ public class prueba extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Ha pagado con tarjeta de crédito, muchas gracias.");
             factura.setMetodo_pago(3);
         }
-        //MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
+        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
         //listaLibroFactura = manager.executeQueryConsultaLLenaTablaLibro(listaLibroFactura);
 
         int id_libro = 0;
@@ -967,6 +967,7 @@ public class prueba extends javax.swing.JFrame {
             precio_ref = listaLibroFactura.get(a).getPrecio_ref();
             anho_publi = listaLibroFactura.get(a).getAnho_publ();
             estado = listaLibroFactura.get(a).getEstado();
+            num_pag =listaLibroFactura.get(a).getNum_pag();
             libro.agregarLibro(id_editorial, num_serie, num_pag, isbn, titulo, precio_ref, anho_publi, estado);
 
         }
@@ -986,6 +987,29 @@ public class prueba extends javax.swing.JFrame {
             auid.agregaRelacion(listaIdiomaLibroEnlaceFactura.get(d).getId_libro(),listaIdiomaLibroEnlaceFactura.get(d).getId_idioma());
         }
         factura.agregarFactura(factura.getFolio(), factura.getPrecio_neto(),factura.getPrecio_iva(),factura.getCosto_iva(),factura.getFecha_compra(),factura.getId_dist(),factura.getMetodo_pago());
+        listaFacturas=manager.executeQueryConsultaLLenaTablaFactura(listaFacturas);
+        
+        int id_factura = listaFacturas.get(listaFacturas.size()-1).getId_factura();
+        System.out.println("Id Factura:"+id_factura);
+        int a=0 ;
+        for (Libro l : listaLibroFactura) {
+            Compra compra = new Compra();
+           
+            id_libro = listaLibroFactura.get(a).getId_libro();
+            compra.setId_libro(id_libro);
+            compra.setId_distribuidor(id_distribuidor);
+            compra.setId_factura(id_factura);
+            compra.agregarCompra(id_libro, id_libro, id_factura);
+            a++;
+        }
+        listaLibroFactura.removeAll(listaLibroFactura);
+        
+        mostrarTablaFactura();
+        mostrarTabla();
+        
+        
+        
+        
         
     }//GEN-LAST:event_metodoPagoTXTActionPerformed
 

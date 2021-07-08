@@ -148,7 +148,7 @@ public class MySQLManager {
         return null;
     }
       public ArrayList<Libro> executeQueryConsultaLLenaTablaLibro(ArrayList<Libro> listaLibro) {
-        System.out.println("ESTOY ENTRANDO Al METODO");
+        System.out.println("Consultando Libros");
         String query = "SELECT * FROM `libro`";
         Connection connection = createConnection();
         Statement statement = null;
@@ -161,6 +161,7 @@ public class MySQLManager {
 
             System.out.println("Entrando al while");
             while (set.next()) {
+                System.out.println("Aca hay un libro");
                 Libro libro = new Libro();
                 libro.setId_libro(set.getInt("id_libro"));
                 libro.setId_editorial(set.getInt("id_editorial"));

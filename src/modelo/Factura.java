@@ -5,6 +5,8 @@
  */
 package modelo;
 
+import controlador.MySQLManager;
+
 /**
  *
  * @author MegaJoc
@@ -15,8 +17,8 @@ public class Factura {
     private double precio_neto;
     private double precio_iva;
     private double costo_iva;
-    private int fecha_compra;
-    private int hora_compra;
+    private String fecha_compra;
+
     private int id_dist;
     private int metodo_pago;
 
@@ -40,7 +42,7 @@ public class Factura {
         return precio_neto;
     }
 
-    public void setPrecio_neto(int precio_neto) {
+    public void setPrecio_neto(double precio_neto) {
         this.precio_neto = precio_neto;
     }
 
@@ -48,7 +50,7 @@ public class Factura {
         return precio_iva;
     }
 
-    public void setPrecio_iva(int precio_iva) {
+    public void setPrecio_iva(double precio_iva) {
         this.precio_iva = precio_iva;
     }
 
@@ -56,25 +58,19 @@ public class Factura {
         return costo_iva;
     }
 
-    public void setCosto_iva(int costo_iva) {
+    public void setCosto_iva(double costo_iva) {
         this.costo_iva = costo_iva;
     }
 
-    public int getFecha_compra() {
+    public String getFecha_compra() {
         return fecha_compra;
     }
 
-    public void setFecha_compra(int fecha_compra) {
+    public void setFecha_compra(String fecha_compra) {
         this.fecha_compra = fecha_compra;
     }
 
-    public int getHora_compra() {
-        return hora_compra;
-    }
 
-    public void setHora_compra(int hora_compra) {
-        this.hora_compra = hora_compra;
-    }
 
     public int getId_dist() {
         return id_dist;
@@ -90,5 +86,12 @@ public class Factura {
 
     public void setMetodo_pago(int metodo_pago) {
         this.metodo_pago = metodo_pago;
+    }
+    //-----------------METODOS DE FACTURA-----------------------
+    
+    public void agregarFactura( int folio, double precio_neto,double precio_iva, double costo_iva,String fecha_compra,int id_dist, int metodo_pago) {
+        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
+        manager.executeUpdate("INSERT INTO `factura`(`folio`, `precio_neto`, `precio_iva`, `costo_iva`, `fecha_compra`, `id_dist`, `metodo_pago`) VALUES ("+folio+","+precio_neto+","+precio_iva+","+costo_iva+",'"+fecha_compra+"',"+id_dist+","+ metodo_pago+")");
+
     }
 }

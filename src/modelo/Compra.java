@@ -49,7 +49,11 @@ public class Compra {
     public void setId_distribuidor(int id_distribuidor) {
         this.id_distribuidor = id_distribuidor;
     }
-     
+    public void agregarCompra(int id_libro,int id_dist, int id_fact){
+        
+    
+    
+    }
      
     
 }

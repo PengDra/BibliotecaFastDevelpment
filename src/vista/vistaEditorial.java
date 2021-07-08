@@ -9,6 +9,7 @@ import controlador.MySQLManager;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import modelo.Editorial;
 
 /**
@@ -243,25 +244,22 @@ public class vistaEditorial extends javax.swing.JFrame {
         limpiarTabla();
         MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
         manager.executeQueryConsultaLLenaTablaEditoriales(listaEditoriales);
-        String matriz[][] = new String[listaEditoriales.size()][1];
+        String matriz[][] = new String[listaEditoriales.size()][2];
         String columnas[]={"Id Editorial","Nombre Editorial"};
+        
         for (int i = 0; i < listaEditoriales.size(); i++) {
-
-            String idaut = Integer.toString(listaEditoriales.get(i).getId_editorial());
-            String nombre = listaEditoriales.get(i).getNom_editorial();
-
-            matriz[i][0] = idaut;
+            Editorial e = listaEditoriales.get(i);
+            String ideditorial =Integer.toString(e.getId_editorial()) ;
+            String nombre = e.getNom_editorial();
+            System.out.println("PIXULAALALALALA"+e.getNom_editorial());
+            matriz[i][0] = ideditorial;
             matriz[i][1] = nombre;
             listaEditoriales.get(i).toString();
 
         }
-        editorialTBL.setModel(new javax.swing.table.DefaultTableModel(
-                matriz,
-                new String[]{
-                    "Id Editorial", "Nombre Editorial"
-                }
-        ));
-
+        DefaultTableModel dtm = new DefaultTableModel(matriz,columnas);
+         editorialTBL.setModel(dtm);
+       
     }
 
     public void limpiarTabla() {

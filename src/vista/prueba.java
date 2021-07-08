@@ -6,6 +6,8 @@
 package vista;
 
 import controlador.MySQLManager;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 
@@ -50,7 +52,7 @@ public class prueba extends javax.swing.JFrame {
     ArrayList<CategoriaLibroEnlace> listaCategoriaLibroEnlaceFactura = new ArrayList<>();
     ArrayList<Distribuidor> listaDistribuidores = new ArrayList<>();
     ArrayList<Factura> listaFacturas = new ArrayList<>();
-    int ultimolibroagregado = 0;
+    int idlibrofactura = 0;
 
     public prueba() {
         initComponents();
@@ -110,8 +112,8 @@ public class prueba extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         nuevafacturaTBL = new javax.swing.JTable();
         confirmarlibrofacturaBTN = new javax.swing.JButton();
-        jLabel13 = new javax.swing.JLabel();
         metodoPagoTXT = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         iddistribuidoraTXT = new javax.swing.JTextField();
         numerofolioTXT = new javax.swing.JTextField();
@@ -288,14 +290,14 @@ public class prueba extends javax.swing.JFrame {
             }
         });
 
-        jLabel13.setText("Folio:");
-
         metodoPagoTXT.setText("Proceder a pago");
         metodoPagoTXT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 metodoPagoTXTActionPerformed(evt);
             }
         });
+
+        jLabel13.setText("Folio:");
 
         jLabel7.setText("Ingrese el id de la distribuidora");
 
@@ -688,7 +690,7 @@ public class prueba extends javax.swing.JFrame {
         listaIdiomaLibroEnlaceFactura.add(a);
         for (int i = 0; i < listaIdiomaLibro.size(); i++) {
             if (listaCategoriaLibro.get(i).getId_cat() == a.getId_idioma()) {
-                idioma = idioma.concat(listaCategoriaLibro.get(i).getNom_cat());
+                idioma = idioma.concat(listaIdiomaLibro.get(i).getNom_idioma());
 
             }
         }
@@ -703,9 +705,49 @@ public class prueba extends javax.swing.JFrame {
     }//GEN-LAST:event_ididiomaLibroTXTActionPerformed
 
     private void confirmarlibrofacturaBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmarlibrofacturaBTNActionPerformed
+        //Que lindo era cuando este boton no hacia nada jiji
+        boolean campovacio = false;
+        for (int i = 0; i < listaLibroFactura.size(); i++) {
+            Libro libro = listaLibroFactura.get(i);
+            if (libro.getId_editorial() == 0) {
+                campovacio = true;
+
+            }
+
+        }
+        for (int i = 0; i < listaAutorLibroEnlaceFactura.size(); i++) {
+            LibroAutorEnlace enlace = listaAutorLibroEnlaceFactura.get(i);
+            if (enlace.getId_libro() == 0) {
+                campovacio = true;
+            }
+
+        }
+        for (int i = 0; i < listaIdiomaLibroEnlaceFactura.size(); i++) {
+            IdiomaLibroEnlace enlace = listaIdiomaLibroEnlaceFactura.get(i);
+            if (enlace.getId_libro() == 0) {
+                campovacio = true;
+
+            }
+
+        }
+        for (int i = 0; i < listaCategoriaLibroEnlaceFactura.size(); i++) {
+            CategoriaLibroEnlace enlace = listaCategoriaLibroEnlaceFactura.get(i);
+            if (enlace.getId_libro() == 0) {
+                campovacio = true;
+
+            }
+
+        }
+        if (campovacio) {
+            System.out.println("Rellena todas las variables");
+            
+
+        } else {
+
+        }
         nuevoLibroBTN.setEnabled(true);
 
-
+        idlibroTXT.setText(Integer.toString(idlibrofactura));
     }//GEN-LAST:event_confirmarlibrofacturaBTNActionPerformed
 
     public void mostrarTablaFactura() {
@@ -735,16 +777,17 @@ public class prueba extends javax.swing.JFrame {
         String autor = "";
         String categoria = "";
         String idioma = "";
-        //int largolista=  listaLibroFactura.size();
+        
         //Tengo que determinar cual será el tamaño de la lista y por consecuente cual será el id del siguiente libro
-        //
+ 
         //tengo que saber si el contador de libro nuevo está en 1 para poder decidir el tamaño de la lista que corresponda
-        int largolista;
-        System.out.println("Ultimo Libro agregado :" + ultimolibroagregado);
+        
         System.out.println("tamaño de la lista libro factura" + listaLibroFactura.size() + " contador nuevo libro");
 
         for (int i = 0; i < listaLibroFactura.size(); i++) {
             Libro libro = new Libro();
+            System.out.println("Libro actual :" + libro.getId_libro() + "Titulo" + libro.getTitulo() + "Año publicado" + libro.getAnho_publ() + "Estado" + libro.getEstado());
+
             libro = listaLibroFactura.get(i);
             System.out.println("Id libro Actual" + listaLibroFactura.get(i).getId_libro());
 
@@ -752,7 +795,7 @@ public class prueba extends javax.swing.JFrame {
 
             System.out.println("Agregando Id libro ->" + listaLibroFactura.get(i).getId_libro());
             String id_libro = Integer.toString(listaLibroFactura.get(i).getId_libro());
-            
+
             String valor_iva = Double.toString(listaLibroFactura.get(i).getPrecio_ref() * 0.19);
             String precio_iva = Double.toString(listaLibroFactura.get(i).getPrecio_ref() + listaLibroFactura.get(i).getPrecio_ref() * 0.19);
             matriz[i][0] = id_libro;
@@ -765,10 +808,10 @@ public class prueba extends javax.swing.JFrame {
             }
             matriz[i][1] = editorial;
 
-            System.out.println("Tamaño de la lista autorenlacefactura :" + listaAutorLibroEnlaceFactura.size());
+            System.out.println("Aqui-> adelante pasele mijo........Tamaño de la lista autorenlacefactura :" + listaAutorLibroEnlaceFactura.size());
             for (int j = 0; j < listaAutorLibroEnlaceFactura.size(); j++) {
                 System.out.println("Fuera del For:");
-                System.out.println("Id libro a comparar ->" + libro.getId_libro() + "ii libro en lista enlace" + listaAutorLibroEnlaceFactura.get(i).getId_libro());
+                //System.out.println("Id libro a comparar ->" + libro.getId_libro() + "ii libro en lista enlace" + listaAutorLibroEnlaceFactura.get(i).getId_libro());
                 if (libro.getId_libro() == listaAutorLibroEnlaceFactura.get(j).getId_libro()) {
 
                     int idautor = listaAutorLibroEnlaceFactura.get(j).getId_autor();
@@ -783,8 +826,8 @@ public class prueba extends javax.swing.JFrame {
                         if (idautor == listaAutorLibro.get(n).getId_autor()) {
 
                             System.out.println(listaAutorLibro.get(n).getNombre());
-                            String nombre = listaAutorLibro.get(j).getNombre();
-                            String apellido = listaAutorLibro.get(j).getAp_pat();
+                            String nombre = listaAutorLibro.get(n).getNombre();
+                            String apellido = listaAutorLibro.get(n).getAp_pat();
                             autor = autor.concat(nombre + " " + apellido);
                             System.out.println(autor);
                         }
@@ -848,35 +891,41 @@ public class prueba extends javax.swing.JFrame {
             matriz[i][11] = precio_iva;
         }
 
-        //Creamos el Tablemodel
-        DefaultTableModel dtm = new DefaultTableModel(matriz, columnas);
+        //Agregamos datos al DTM    
+        DefaultTableModel dt = new DefaultTableModel(matriz, columnas);
 
-        nuevafacturaTBL.setModel(dtm);
+        nuevafacturaTBL.setModel(dt);
 
     }
     private void metodoPagoTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_metodoPagoTXTActionPerformed
-        
-        Factura factura = new Factura(); 
+
+        Factura factura = new Factura();
         int id_distribuidor;
         id_distribuidor = Integer.parseInt(iddistribuidoraTXT.getText());
         factura.setId_dist(id_distribuidor);
         int folio = Integer.parseInt(numerofolioTXT.getText());
+        String fecha;
         double precio_total;
         double precio_neto = 0;
         double precio_iva = 0;
         for (int i = 0; i < listaLibroFactura.size(); i++) {
-            precio_neto = precio_neto +listaLibroFactura.get(i).getPrecio_ref();
+            precio_neto = precio_neto + listaLibroFactura.get(i).getPrecio_ref();
         }
         for (int i = 0; i < listaLibroFactura.size(); i++) {
-            precio_iva= precio_iva+listaLibroFactura.get(i).getPrecio_ref()*0.19;
-            
+            precio_iva = precio_iva + listaLibroFactura.get(i).getPrecio_ref() * 0.19;
+
         }
-        precio_total = precio_neto+precio_iva;
+        precio_total = precio_neto + precio_iva;
+
         factura.setFolio(folio);
-        //Cambios Cambios, muchos cambios
-      
-        
-        
+        factura.setCosto_iva(precio_iva);
+        factura.setPrecio_neto(precio_neto);
+        factura.setPrecio_iva(precio_total);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        fecha = dtf.format(LocalDateTime.now());
+        System.out.println(fecha);
+        factura.setFecha_compra(fecha);
+
         int seleccion = JOptionPane.showOptionDialog(null, "Seleccione una opcion",
                 "Selector de opciones", JOptionPane.YES_NO_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null,// null para icono por defecto.
@@ -885,40 +934,59 @@ public class prueba extends javax.swing.JFrame {
         if (seleccion == 0) {
 
             JOptionPane.showMessageDialog(null, "Ha pagado con efectivo, muchas gracias.");
-
+            factura.setMetodo_pago(1);
         } else if (seleccion == 1) {
+
             JOptionPane.showMessageDialog(null, "Ha pagado con tarjeta de débito, muchas gracias.");
+            factura.setMetodo_pago(2);
         } else {
+
             JOptionPane.showMessageDialog(null, "Ha pagado con tarjeta de crédito, muchas gracias.");
+            factura.setMetodo_pago(3);
+        }
+        //MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
+        //listaLibroFactura = manager.executeQueryConsultaLLenaTablaLibro(listaLibroFactura);
+
+        int id_libro = 0;
+        int id_editorial = 0;
+        int num_serie;
+        String isbn;
+        String titulo;
+        int num_pag = 0;
+        int precio_ref;
+        int anho_publi;
+        int estado;
+
+        for (int a = 0; a < listaLibroFactura.size(); a++) {
+            Libro libro = new Libro();
+            id_libro = listaLibroFactura.get(a).getId_libro();
+            id_editorial = listaLibroFactura.get(a).getId_editorial();
+            num_serie = listaLibroFactura.get(a).getNum_serie();
+            isbn = listaLibroFactura.get(a).getIsbn();
+            titulo = listaLibroFactura.get(a).getTitulo();
+            precio_ref = listaLibroFactura.get(a).getPrecio_ref();
+            anho_publi = listaLibroFactura.get(a).getAnho_publ();
+            estado = listaLibroFactura.get(a).getEstado();
+            libro.agregarLibro(id_editorial, num_serie, num_pag, isbn, titulo, precio_ref, anho_publi, estado);
+
+        }
+        LibroAutorEnlace en = new LibroAutorEnlace();
+        for (int b = 0; b < listaAutorLibroEnlaceFactura.size(); b++) {
+            en.agregaRelacion(listaAutorLibroEnlaceFactura.get(b).getId_libro(), listaAutorLibroEnlaceFactura.get(b).getId_autor());
+
+        }
+        CategoriaLibroEnlace encl = new CategoriaLibroEnlace();
+        for (int c = 0; c < listaCategoriaLibroEnlaceFactura.size(); c++) {
+            encl.agregaRelacion(listaCategoriaLibroEnlaceFactura.get(c).getId_libro(), listaCategoriaLibroEnlaceFactura.get(c).getId_cat());
         }
 
-        for (int i = 0; i < listaLibroFactura.size(); i++) {
+        IdiomaLibroEnlace auid = new IdiomaLibroEnlace();
 
-            MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
-            listaLibroFactura = manager.executeQueryConsultaLLenaTablaLibro(listaLibroFactura);
-
-            int id_libro = 0;
-            for (int a = 0; a < listaLibroFactura.size(); a++) {
-                id_libro = listaLibroFactura.get(a).getId_libro();
-            }
-            LibroAutorEnlace en = new LibroAutorEnlace();
-            CategoriaLibroEnlace encl = new CategoriaLibroEnlace();
-            IdiomaLibroEnlace auid = new IdiomaLibroEnlace();
-
-            for (int b = 0; b < listaAutorLibro.size(); b++) {
-                en.agregaRelacion(id_libro, listaAutorLibro.get(b).getId_autor());
-
-            }
-            for (int c = 0; c < listaCategoriaLibro.size(); c++) {
-                encl.agregaRelacion(id_libro,
-                        listaCategoriaLibro.get(c).getId_cat());
-            }
-            for (int d = 0; d < listaCategoriaLibro.size(); d++) {
-                auid.agregaRelacion(id_libro,
-                        listaIdiomaLibro.get(d).getId_idioma());
-            }
-
+        for (int d = 0; d < listaCategoriaLibroEnlaceFactura.size(); d++) {
+            auid.agregaRelacion(listaIdiomaLibroEnlaceFactura.get(d).getId_libro(),listaIdiomaLibroEnlaceFactura.get(d).getId_idioma());
         }
+        factura.agregarFactura(factura.getFolio(), factura.getPrecio_neto(),factura.getPrecio_iva(),factura.getCosto_iva(),factura.getFecha_compra(),factura.getId_dist(),factura.getMetodo_pago());
+        
     }//GEN-LAST:event_metodoPagoTXTActionPerformed
 
     private void idEditorialTXTKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_idEditorialTXTKeyTyped
@@ -1005,26 +1073,20 @@ public class prueba extends javax.swing.JFrame {
     private void nuevoLibroBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoLibroBTNActionPerformed
         //Necesito llenar el arraylist de libros
         //Inicializo el objeto de manager sql para obtenerlo
-        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
+        //MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
         //llenar el arraylist de libros
-        manager.executeQueryConsultaLLenaTablaLibro(listaLibro);
+        //manager.executeQueryConsultaLLenaTablaLibro(listaLibro);
         //Obtengo el ultimo indice de la lista
-        int id_libro;
-        System.out.println("ultimo libro agregado  :" + ultimolibroagregado);
+        
+        int id_libro; 
+        idlibrofactura++;
+        id_libro= idlibrofactura;
+        
 
-        if (ultimolibroagregado == 0) {
-            int ultimolibro = listaLibro.get(listaLibro.size() - 1).getId_libro() + 1;
-            id_libro = ultimolibro;
-            ultimolibroagregado = ultimolibro;
-        } else {
-            id_libro = ultimolibroagregado;
-
-        }
-
-        System.out.println("Ultimo libro ->" + ultimolibroagregado);
+       
         Libro libro = new Libro();
         libro.setId_libro(id_libro);
-        ultimolibroagregado++;
+        //Se obtienen las variables desde el formulario
 
         int num_serie = Integer.parseInt(numeroSerieTXT.getText());
         int num_pag = Integer.parseInt(numeroDePaginasTXT.getText());
@@ -1062,6 +1124,7 @@ public class prueba extends javax.swing.JFrame {
         System.out.println("Mostrando Tabla de Libros");
         //Limpiamos las listas que contienen todas los datos
         listaAutorLibro.removeAll(listaAutorLibro);
+
         listaEditorialLibro.removeAll(listaEditorialLibro);
         listaCategoriaLibro.removeAll(listaCategoriaLibro);
         listaIdiomaLibro.removeAll(listaIdiomaLibro);
@@ -1072,133 +1135,169 @@ public class prueba extends javax.swing.JFrame {
         //Se llenan las listas
         MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
         manager.executeQueryConsultaLLenaTablaAutores(listaAutorLibro);
+        //Consultar si la lista de libros se encuentra vacia
+
+        if (listaAutorLibro.isEmpty()) {
+            System.out.println("No hay autores agregados a la lista ");
+            nuevoLibroBTN.setEnabled(false);
+        }
+
         manager.executeQueryConsultaLLenaTablaCategoria(listaCategoriaLibro);
+        if (listaCategoriaLibro.isEmpty()) {
+            System.out.println("No hay Categorias agregados a la lista ");
+            nuevoLibroBTN.setEnabled(false);
+
+        }
+
         manager.executeQueryConsultaLLenaTablaEditoriales(listaEditorialLibro);
+        if (listaEditorialLibro.isEmpty()) {
+            System.out.println("No hay Editoriales agregados a la lista ");
+            nuevoLibroBTN.setEnabled(false);
+
+        }
         manager.executeQueryConsultaLLenaTablaIdioma(listaIdiomaLibro);
+        if (listaIdiomaLibro.isEmpty()) {
+            System.out.println("No hay idiomas agregados a la lista ");
+            nuevoLibroBTN.setEnabled(false);
+
+        }
         manager.executeQueryConsultaLLenaTablaLibro(listaLibro);
+        System.out.println("Tamaño de la listalibro :" + listaLibro.size());
+        //Se define el tamaño de la lista dependiendo de que si el tamaño de la lista es =0
+        
+
         manager.executeQueryConsultaLLenaListaCategoriaLibroEnlace(listaCategoriaLibroEnlace);
+
         manager.executeQueryConsultaLLenaListaIdiomaLibroEnlace(listaIdiomaLibroEnlace);
+
         manager.executeQueryConsultaLLenaListaLibroAutorEnlace(listaAutorLibroEnlace);
+
         //Se define la matriz que contiene la informacion
         String matriz[][] = new String[listaLibro.size()][10];
         //Se definen las columnas de la tabla
         String[] columnas = {"Id Libro", "Editorial", "Autor", "Categoria", "Idioma", "Titulo", "ISBN", "Numero de serie", "Num. de Paginas", "Precio Referencial"};
         //Este iterador llena la matriz que contiene los datos
+        if (listaLibro.isEmpty()) {
+            String[] columna = {"No hay libros en ", "la base de datos"};
+            String[][] matrix = new String[1][1];
+            DefaultTableModel dt = new DefaultTableModel(matrix, columna);
+            libros.setModel(dt);
 
-        for (int i = 0; i < listaLibro.size(); i++) {
-            //Se definen las variables auxiliares que contendrán la Editorial, Autor, Categoria e Idioma 
-            String editorial = "";
-            String autor = "";
-            String categoria = "";
-            String idioma = "";
-            //Se definen variables auxiliares
+        } else {
+            for (int i = 0; i < listaLibro.size(); i++) {
+                //Se definen las variables auxiliares que contendrán la Editorial, Autor, Categoria e Idioma 
+                String editorial = "";
+                String autor = "";
+                String categoria = "";
+                String idioma = "";
+                //Se definen variables auxiliares
 
-            int idlibroaux;
-            int idedaux;
-            System.out.println(listaLibro.get(i).getId_libro());
-            idlibroaux = listaLibro.get(i).getId_libro();
-            idedaux = listaLibro.get(i).getId_editorial();
-            //Se muestra por pantalla la vuelta el id actual y el id de editorial
-            System.out.println("Vuelta: " + i);
-            System.out.println("Id del libro actual : " + idlibroaux);
-            System.out.println("Id de editorial de libro:" + idedaux);
-            String idlibro = Integer.toString(listaLibro.get(i).getId_libro());
-            String num_serie = Integer.toString(listaLibro.get(i).getNum_serie());
-            String num_pag = Integer.toString(listaLibro.get(i).getNum_pag());
-            String precio_ref = Integer.toString(listaLibro.get(i).getPrecio_ref());
-            matriz[i][0] = idlibro;
+                int idlibroaux;
+                int idedaux;
+                System.out.println(listaLibro.get(i).getId_libro());
+                idlibroaux = listaLibro.get(i).getId_libro();
+                idedaux = listaLibro.get(i).getId_editorial();
+                //Se muestra por pantalla la vuelta el id actual y el id de editorial
+                System.out.println("Vuelta: " + i);
+                System.out.println("Id del libro actual : " + idlibroaux);
+                System.out.println("Id de editorial de libro:" + idedaux);
+                String idlibro = Integer.toString(listaLibro.get(i).getId_libro());
+                String num_serie = Integer.toString(listaLibro.get(i).getNum_serie());
+                String num_pag = Integer.toString(listaLibro.get(i).getNum_pag());
+                String precio_ref = Integer.toString(listaLibro.get(i).getPrecio_ref());
+                matriz[i][0] = idlibro;
 
-            System.out.println("Iniciando carga de editoriales");
-            System.out.println("Tamaño de la lista de editoriales: " + listaEditorialLibro.size());
-            //Manejo de Editoriales, los cuales se obtienen desde lista editorial 
-            for (int k = 0; k < listaEditorialLibro.size(); k++) {
+                System.out.println("Iniciando carga de editoriales");
+                System.out.println("Tamaño de la lista de editoriales: " + listaEditorialLibro.size());
+                //Manejo de Editoriales, los cuales se obtienen desde lista editorial 
+                for (int k = 0; k < listaEditorialLibro.size(); k++) {
 
-                System.out.println("Editoriales ->id actual:" + listaEditorialLibro.get(k).getId_editorial() + " id editorial de libro a comparar: " + idedaux);
+                    System.out.println("Editoriales ->id actual:" + listaEditorialLibro.get(k).getId_editorial() + " id editorial de libro a comparar: " + idedaux);
 
-                if (listaEditorialLibro.get(k).getId_editorial() == idedaux) {
-                    System.out.println("Editorial Agregada: " + listaEditorialLibro.get(k).getNom_editorial());
-                    editorial = editorial.concat(listaEditorialLibro.get(k).getNom_editorial());
-                    System.out.println(editorial);
-
-                }
-
-            }
-
-            matriz[i][1] = editorial;
-
-            System.out.println("Iniciando carga de autores");
-            System.out.println("Tamaño del array de listalibroenlace:" + listaAutorLibroEnlace.size());
-            for (int j = 0; j < listaAutorLibroEnlace.size(); j++) {
-
-                System.out.println("Autores ->id actual: " + listaAutorLibroEnlace.get(j).getId_autor() + " id libro a comparar:" + idlibroaux);
-                if (listaAutorLibroEnlace.get(j).getId_libro() == idlibroaux) {
-                    int idautor = listaAutorLibroEnlace.get(j).getId_autor();
-
-                    //Saqué la id del autor, hay que compararla con la id de la lista autores libros.
-                    //Haré un for con toda la lista de autores y por cada autor que sea igual al id autor
-                    //Se agregan y se concatenan en la tabla
-                    //succes!!
-                    for (int n = 0; n < listaAutorLibro.size(); n++) {
-                        if (idautor == listaAutorLibro.get(n).getId_autor()) {
-                            System.out.println(listaAutorLibro.get(n).getNombre());
-                            String nombre = listaAutorLibro.get(j).getNombre();
-                            String apellido = listaAutorLibro.get(j).getAp_pat();
-                            autor = autor.concat(nombre + " " + apellido);
-                            System.out.println(autor);
-                        }
-
-                    }
-
-                }
-            }
-            matriz[i][2] = autor;
-            System.out.println("Iniciando carga de Categorias");
-            for (int l = 0; l < listaCategoriaLibro.size(); l++) {
-                System.out.println("Categoria -> id categoria libro a comparar:" + listaCategoriaLibro.get(l).getId_cat() + " id actual:" + idlibroaux);
-                if (idlibroaux == listaCategoriaLibroEnlace.get(l).getId_libro()) {
-
-                    //Sacamos la id de la categoria lo que se compara con la lista de categoria
-                    int idcategoria = listaCategoriaLibroEnlace.get(l).getId_cat();
-                    for (int m = 0; m < listaCategoriaLibro.size(); m++) {
-                        if (idcategoria == listaCategoriaLibroEnlace.get(m).getId_cat()) {
-                            System.out.println(listaCategoriaLibro.get(m).getNom_cat());
-                            categoria = categoria.concat(listaCategoriaLibro.get(m).getNom_cat());
-                            System.out.println(categoria);
-                        }
+                    if (listaEditorialLibro.get(k).getId_editorial() == idedaux) {
+                        System.out.println("Editorial Agregada: " + listaEditorialLibro.get(k).getNom_editorial());
+                        editorial = editorial.concat(listaEditorialLibro.get(k).getNom_editorial());
+                        System.out.println(editorial);
 
                     }
 
                 }
 
-            }
-            matriz[i][3] = categoria;
-            for (int p = 0; p < listaIdiomaLibro.size(); p++) {
-                System.out.println("Idioma -> id libro a comparar: " + idlibroaux + ", id del idioma a comparar : " + listaIdiomaLibroEnlace.get(p).getId_libro());
-                if (idlibroaux == listaIdiomaLibroEnlace.get(p).getId_libro()) {
-                    //Debo de concatenar el nombre a idioma String, pero primero debo de tener el id que lo sacaré de id libro
-                    //
-                    int ididioma = listaIdiomaLibroEnlace.get(p).getId_libro();
-                    for (int q = 0; q < listaIdiomaLibro.size(); q++) {
-                        if (ididioma == listaIdiomaLibro.get(q).getId_idioma()) {
-                            System.out.println("Idioma: " + listaIdiomaLibro.get(q).getNom_idioma());
-                            idioma = idioma.concat(listaIdiomaLibro.get(q).getNom_idioma());
-                            System.out.println(idioma);
+                matriz[i][1] = editorial;
+
+                System.out.println("Iniciando carga de autores");
+                System.out.println("Tamaño del array de listalibroenlace:" + listaAutorLibroEnlace.size());
+                for (int j = 0; j < listaAutorLibroEnlace.size(); j++) {
+
+                    System.out.println("Autores ->id actual: " + listaAutorLibroEnlace.get(j).getId_autor() + " id libro a comparar:" + idlibroaux);
+                    if (listaAutorLibroEnlace.get(j).getId_libro() == idlibroaux) {
+                        int idautor = listaAutorLibroEnlace.get(j).getId_autor();
+
+                        //Saqué la id del autor, hay que compararla con la id de la lista autores libros.
+                        //Haré un for con toda la lista de autores y por cada autor que sea igual al id autor
+                        //Se agregan y se concatenan en la tabla
+                        //succes!!
+                        for (int n = 0; n < listaAutorLibro.size(); n++) {
+                            if (idautor == listaAutorLibro.get(n).getId_autor()) {
+                                System.out.println(listaAutorLibro.get(n).getNombre());
+                                String nombre = listaAutorLibro.get(n).getNombre();
+                                String apellido = listaAutorLibro.get(n).getAp_pat();
+                                autor = autor.concat(nombre + " " + apellido);
+                                System.out.println(autor);
+                            }
+
                         }
+
+                    }
+                }
+                matriz[i][2] = autor;
+                System.out.println("Iniciando carga de Categorias");
+                for (int l = 0; l < listaCategoriaLibro.size(); l++) {
+                    System.out.println("Categoria -> id categoria libro a comparar:" + listaCategoriaLibro.get(l).getId_cat() + " id actual:" + idlibroaux);
+                    if (idlibroaux == listaCategoriaLibroEnlace.get(l).getId_libro()) {
+
+                        //Sacamos la id de la categoria lo que se compara con la lista de categoria
+                        int idcategoria = listaCategoriaLibroEnlace.get(l).getId_cat();
+                        for (int m = 0; m < listaCategoriaLibro.size(); m++) {
+                            if (idcategoria == listaCategoriaLibroEnlace.get(m).getId_cat()) {
+                                System.out.println(listaCategoriaLibro.get(m).getNom_cat());
+                                categoria = categoria.concat(listaCategoriaLibro.get(m).getNom_cat());
+                                System.out.println(categoria);
+                            }
+
+                        }
+
                     }
 
                 }
-            }
-            matriz[i][4] = idioma;
-            matriz[i][5] = listaLibro.get(i).getTitulo();
-            matriz[i][6] = listaLibro.get(i).getIsbn();
-            matriz[i][7] = num_serie;
-            matriz[i][8] = num_pag;
-            matriz[i][9] = precio_ref;
+                matriz[i][3] = categoria;
+                for (int p = 0; p < listaIdiomaLibro.size(); p++) {
+                    System.out.println("Idioma -> id libro a comparar: " + idlibroaux + ", id del idioma a comparar : " + listaIdiomaLibroEnlace.get(p).getId_libro());
+                    if (idlibroaux == listaIdiomaLibroEnlace.get(p).getId_libro()) {
+                        //Debo de concatenar el nombre a idioma String, pero primero debo de tener el id que lo sacaré de id libro
+                        //
+                        int ididioma = listaIdiomaLibroEnlace.get(p).getId_libro();
+                        for (int q = 0; q < listaIdiomaLibro.size(); q++) {
+                            if (ididioma == listaIdiomaLibro.get(q).getId_idioma()) {
+                                System.out.println("Idioma: " + listaIdiomaLibro.get(q).getNom_idioma());
+                                idioma = idioma.concat(listaIdiomaLibro.get(q).getNom_idioma());
+                                System.out.println(idioma);
+                            }
+                        }
 
+                    }
+                }
+                matriz[i][4] = idioma;
+                matriz[i][5] = listaLibro.get(i).getTitulo();
+                matriz[i][6] = listaLibro.get(i).getIsbn();
+                matriz[i][7] = num_serie;
+                matriz[i][8] = num_pag;
+                matriz[i][9] = precio_ref;
+
+            }
+            DefaultTableModel dtm = new DefaultTableModel(matriz, columnas);
+            libros.setModel(dtm);
         }
-        DefaultTableModel dtm = new DefaultTableModel(matriz, columnas);
-        libros.setModel(dtm);
-
     }
 
     public void limpiarTabla() {

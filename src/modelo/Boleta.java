@@ -5,6 +5,8 @@
  */
 package modelo;
 
+import controlador.MySQLManager;
+
 /**
  *
  * @author Gn3p
@@ -94,7 +96,13 @@ public class Boleta {
     public void setMetodo_pago(int metodo_pago) {
         this.metodo_pago = metodo_pago;
     }
+    //Agregar boleta
     
+     public void agregarBoleta( String folio, double precio_neto,double precio_iva, double costo_iva,String fecha,int id_cliente,int id_trabajador, int metodo_pago) {
+        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
+        manager.executeUpdate("INSERT INTO `boleta`(`folio`, `precio_neto`, `precio_iva`, `costo_iva`, `fecha_venta`, `id_cliente`, `id_trabajador`, `metodo_pago`) VALUES ('"+folio+"',"+precio_neto+","+precio_iva+","+costo_iva+",'"+fecha+"',"+id_cliente+","+id_trabajador+","+ metodo_pago+")");
+
+    }
     
     
     

@@ -6,15 +6,21 @@
 package vista;
 
 import controlador.MySQLManager;
+import java.time.LocalDateTime;
+
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 import javax.swing.table.DefaultTableModel;
 import modelo.Autor;
 import modelo.Boleta;
+import modelo.Carro_Compra;
 
 import modelo.Cliente;
 import modelo.Libro;
 import modelo.Trabajador;
+import modelo.Venta;
 
 /**
  *
@@ -25,9 +31,13 @@ public class ventaClientes extends javax.swing.JFrame {
     ArrayList<Libro> listaLibro = new ArrayList<>();
     ArrayList<Libro> listaLibroBoleta = new ArrayList<>();
     ArrayList<Cliente> listaCliente = new ArrayList<>();
+    ArrayList<Cliente> listaClienteBoleta = new ArrayList<>();
     ArrayList<Autor> listaAutor = new ArrayList<Autor>();
     ArrayList<Trabajador> listaTrabajador = new ArrayList<>();
+    ArrayList<Trabajador> listaTrabajadorBoleta = new ArrayList<>();
     ArrayList<Boleta> listaBoleta = new ArrayList<Boleta>();
+    ArrayList<Carro_Compra>listaCarroCompra =new ArrayList<Carro_Compra>();
+    ArrayList<Venta> listaVentas =new ArrayList<Venta>();
     int ultimaboleta = 0;
     Cliente cliente = new Cliente();
     Trabajador trabajador = new Trabajador();
@@ -37,9 +47,9 @@ public class ventaClientes extends javax.swing.JFrame {
      * Creates new form ventaClientes
      */
     public ventaClientes() {
-       
+
         initComponents();
-        mostrarTabla();
+
     }
 
     /**
@@ -64,18 +74,20 @@ public class ventaClientes extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         boletaTBL = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
-        comprarBTN = new javax.swing.JButton();
+        metodopagoBTN = new javax.swing.JButton();
         verBoletasBTN = new javax.swing.JButton();
         idclienteLBL = new javax.swing.JLabel();
         idlibroLBL = new javax.swing.JLabel();
         idtrabajadorLBL = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        folioTXT = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Página de venta de libros a clientes Fast Development");
 
-        jLabel2.setText("Ingrese ID de libro a comprar.");
+        jLabel2.setText("Ingrese ID de libro a comprar");
 
         jLabel3.setText("Ingrese su ID de cliente.");
 
@@ -99,7 +111,7 @@ public class ventaClientes extends javax.swing.JFrame {
             }
         });
 
-        agregarIdClienteBTN.setText("Agregar");
+        agregarIdClienteBTN.setText("Agregar ID Cliente");
         agregarIdClienteBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 agregarIdClienteBTNActionPerformed(evt);
@@ -113,7 +125,7 @@ public class ventaClientes extends javax.swing.JFrame {
             }
         });
 
-        agregarIdTrabajadorBTN.setText("Agregar");
+        agregarIdTrabajadorBTN.setText("Agregar ID Trabajador");
         agregarIdTrabajadorBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 agregarIdTrabajadorBTNActionPerformed(evt);
@@ -122,13 +134,13 @@ public class ventaClientes extends javax.swing.JFrame {
 
         boletaTBL.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Nombre de libro", "Precio neto", "Precio con IVA", "Costo IVA", "Fecha de venta", "Hora de venta", "Nombre de cliente", "Nombre de trabajador"
+                "Titulo", "Precio neto", "Precio con IVA", "Costo IVA", "Fecha de venta", "Nombre de cliente", "Nombre de trabajador"
             }
         ));
         jScrollPane2.setViewportView(boletaTBL);
@@ -136,7 +148,12 @@ public class ventaClientes extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel6.setText("Vista previa de su boleta, si los datos son correctos, presione el botón \"Comprar\" para ver la forma de pago.");
 
-        comprarBTN.setText("Comprar");
+        metodopagoBTN.setText("Seleccionar Metodo de Pago");
+        metodopagoBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                metodopagoBTNActionPerformed(evt);
+            }
+        });
 
         verBoletasBTN.setText("Ver boletas");
 
@@ -146,84 +163,100 @@ public class ventaClientes extends javax.swing.JFrame {
 
         idtrabajadorLBL.setText("Ingrese Id de trabajador");
 
+        jLabel5.setText("Ingrese Folio de boleta");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 46, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(idLibroVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(idTrabajadorVentaTXT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(agregarIdTrabajadorBTN)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(idtrabajadorLBL))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(26, 26, 26)
-                                        .addComponent(agregarIdLibroBTN)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(idlibroLBL))))
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel4))
-                        .addGap(339, 339, 339)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(comprarBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(verBoletasBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel6)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(idTrabajadorVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(agregarIdTrabajadorBTN))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(idtrabajadorLBL)
+                                    .addGap(210, 210, 210)
+                                    .addComponent(jLabel5)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(folioTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(idclienteLBL))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1077, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(395, 395, 395)
+                        .addComponent(metodopagoBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(428, 428, 428)
+                        .addComponent(verBoletasBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(242, 242, 242)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(653, 653, 653)
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
                         .addComponent(idClienteVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(agregarIdClienteBTN)
-                        .addGap(18, 18, 18)
-                        .addComponent(idclienteLBL))
-                    .addComponent(jLabel3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(agregarIdClienteBTN))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(114, 114, 114)
+                        .addComponent(jLabel6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(304, 304, 304)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(159, 159, 159)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(idlibroLBL)
+                                    .addComponent(idLibroVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(41, 41, 41)
+                                .addComponent(agregarIdLibroBTN)))))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(idClienteVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(agregarIdClienteBTN)
-                    .addComponent(idclienteLBL))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(comprarBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(8, 8, 8)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(idLibroVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(agregarIdLibroBTN)
-                    .addComponent(idlibroLBL))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(verBoletasBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(idTrabajadorVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(agregarIdTrabajadorBTN)
-                    .addComponent(idtrabajadorLBL))
-                .addGap(57, 57, 57)
+                    .addComponent(agregarIdClienteBTN)
+                    .addComponent(idClienteVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel6)
+                .addGap(62, 62, 62)
+                .addComponent(idlibroLBL)
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(idLibroVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(agregarIdLibroBTN))
+                .addGap(46, 46, 46)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(idtrabajadorLBL)
+                    .addComponent(idclienteLBL)
+                    .addComponent(jLabel5)
+                    .addComponent(folioTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(166, 166, 166))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(metodopagoBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(verBoletasBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7))
         );
 
         pack();
@@ -251,10 +284,9 @@ public class ventaClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_idTrabajadorVentaTXTKeyTyped
 
     private void agregarIdClienteBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarIdClienteBTNActionPerformed
-       
+        listaLibro.removeAll(listaLibro);
         MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
         manager.executeQueryConsultaLLenaTablaClientes(listaCliente);
-        
 
         int idCliente;
         idCliente = Integer.parseInt(idClienteVentaTXT.getText());
@@ -263,76 +295,104 @@ public class ventaClientes extends javax.swing.JFrame {
             if (idCliente == listaCliente.get(i).getId_cliente()) {
                 cliente = listaCliente.get(i);
                 System.out.println(cliente.getId_cliente());
-                idclienteLBL.setText("Id de cliente actual en boleta" + cliente.getId_cliente());
+                listaClienteBoleta.add(cliente);
+                idclienteLBL.setText(cliente.getNombre() + " " + cliente.getApellido_pat());
             } else {
                 idclienteLBL.setText("Cliente no existe en la Base de datos");
             }
-            
+
         }
 
         mostrarTabla();
     }//GEN-LAST:event_agregarIdClienteBTNActionPerformed
-    private void limpiarTabla() {
-        for (int i = 0; i < listaCliente.size(); i++) {
-            listaCliente.remove(i);
-        }
-    }
 
     private void mostrarTabla() {
+        //Se llenan las listas
+        listaLibro.removeAll(listaLibro);
+        listaCliente.removeAll(listaCliente);
+        listaTrabajador.removeAll(listaTrabajador);
         MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
         manager.executeQueryConsultaLLenaTablaLibro(listaLibro);
         manager.executeQueryConsultaLLenaTablaClientes(listaCliente);
         manager.executeQueryConsultaLLenaTablaTrabajadores(listaTrabajador);
 
-        
-        String columnas[]={"Nombre libro","Precio Neto", "Precio con Iva","Costo IVA","Fecha Venta","Nombre Cliente","Nombre Trabajador"};
-        String matriz[][] = new String[listaLibroBoleta.size()][4];
-       
-        if (listaLibro.isEmpty()) {
-            String[] columna = {"No hay libros en ", "la base de datos"};
+        //Se definen los libros que se compraran
+        String columnas[] = {"Titulo", "Precio Neto", "Precio con Iva", "Costo IVA", "Fecha Venta", "Nombre Cliente", "Nombre Trabajador"};
+        String matriz[][] = new String[listaLibroBoleta.size()][7];
+
+        if (listaLibroBoleta.isEmpty()) {
+            String[] columna = {"Seleccione libros ", "para iniciar compra"};
             String[][] matrix = new String[1][1];
             DefaultTableModel dt = new DefaultTableModel(matrix, columna);
             boletaTBL.setModel(dt);
 
         } else {
-        for (int i = 0; i < listaLibroBoleta.size(); i++) {
 
+            for (int k = 0; k < listaCliente.size(); k++) {
+                for (int m = 0; m < listaClienteBoleta.size(); m++) {
+                    if (listaCliente.get(m).getId_cliente() == listaClienteBoleta.get(m).getId_cliente()) {
+                        cliente = listaCliente.get(k);
+                    }
+                }
+                for (int n = 0; n < listaTrabajador.size(); n++) {
 
+                    for (int l = 0; l < listaTrabajadorBoleta.size(); l++) {
+                        if (listaTrabajador.get(l).getId_trabajador() == listaTrabajadorBoleta.get(l).getId_trabajador()) {
+                            trabajador = listaTrabajador.get(l);
+                        }
+                    }
+                }
 
-            String idCliente = Integer.toString(listaCliente.get(i).getId_cliente());
-            String precio_ref = Integer.toString(listaLibroBoleta.get(i).getPrecio_ref());
-            String precio_iva = precio_ref + Double.toString(listaLibroBoleta.get(i).getPrecio_ref() * 0.19);
-         
-            matriz[i][0] = idCliente;
-            matriz[i][1] = Integer.toString(listaLibroBoleta.get(i).getPrecio_ref());
-            matriz[i][2] = precio_iva;
-            matriz[i][3] = precio_ref + Double.toString(listaLibroBoleta.get(i).getPrecio_ref() * 0.19);
-            
-            matriz[i][4] ="";
-            matriz[i][5] ="";
-            matriz[i][6] ="";
-            
+            }
+            for (int i = 0; i < listaLibroBoleta.size(); i++) {
+                String titulo = "Libro no encontrado";
+                String precio_neto = "";
+                String precio_iva = "";
+                String precio_total = "";
+                String id_factura = "";
+                for (int j = 0; j < listaLibro.size(); j++) {
+                    if (listaLibroBoleta.get(i).getId_libro() == listaLibro.get(j).getId_libro()) {
+                        titulo = listaLibro.get(j).getTitulo();
+                        precio_neto = Integer.toString(listaLibro.get(j).getPrecio_ref());
+                        double iva = listaLibro.get(j).getPrecio_ref() * 0.19;
+                        double preciocniva = listaLibro.get(j).getPrecio_ref() + iva;
+                        precio_iva = "" + iva;
+                        precio_total = "" + preciocniva;
+                        System.out.println(titulo + "-" + precio_neto + "-" + precio_iva + "-" + precio_total);
 
+                    }
+                }
 
-            
+                matriz[i][0] = titulo;
+
+                matriz[i][1] = precio_neto;
+                matriz[i][2] = precio_iva;
+                matriz[i][3] = precio_total;
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                String fecha = dtf.format(LocalDateTime.now());
+                matriz[i][4] = fecha;
+                matriz[i][5] = trabajador.getNombre() + " " + trabajador.getApellido_pat();
+                matriz[i][6] = cliente.getNombre() + " " + cliente.getApellido_pat();
+            }
+            DefaultTableModel dtm = new DefaultTableModel(matriz, columnas);
+            boletaTBL.setModel(dtm);
         }
-        DefaultTableModel dtm = new DefaultTableModel(matriz, columnas);
-        boletaTBL.setModel(dtm); 
-
-    }
     }
     private void agregarIdLibroBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarIdLibroBTNActionPerformed
         // TODO add your handling code here:  
-        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");        
-        manager.executeQueryConsultaLLenaTablaLibro(listaLibro);          
+        listaLibro.removeAll(listaLibro);
+        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
+        manager.executeQueryConsultaLLenaTablaLibro(listaLibro);
         int idLibro;
-        
+
         idLibro = Integer.parseInt(idLibroVentaTXT.getText());
-        
+        System.out.println("Id libro a buscar en la lista libro-> " + idLibro);
         for (int i = 0; i < listaLibro.size(); i++) {
             System.out.println(listaLibro.get(i).getId_libro());
             if (idLibro == listaLibro.get(i).getId_libro()) {
                 libro = listaLibro.get(i);
+                listaLibroBoleta.add(libro);
+                System.out.println("Ultimo libro agregado :->" + listaLibroBoleta.get(listaLibroBoleta.size() - 1).getTitulo());
                 idlibroLBL.setText("Id de Libro actual en boleta" + libro.getId_libro());
             } else {
                 idlibroLBL.setText("Libro no existe en la Base de datos");
@@ -343,6 +403,7 @@ public class ventaClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_agregarIdLibroBTNActionPerformed
 
     private void agregarIdTrabajadorBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarIdTrabajadorBTNActionPerformed
+        listaLibro.removeAll(listaLibro);
         MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
         manager.executeQueryConsultaLLenaTablaTrabajadores(listaTrabajador);
 
@@ -352,14 +413,104 @@ public class ventaClientes extends javax.swing.JFrame {
         for (int i = 0; i < listaTrabajador.size(); i++) {
             if (idtrabajador == listaTrabajador.get(i).getId_trabajador()) {
                 trabajador = listaTrabajador.get(i);
-                idlibroLBL.setText("Id de Trabajador actual en boleta" + trabajador.getId_trabajador());
+                idtrabajadorLBL.setText("Id de Trabajador actual en boleta" + trabajador.getNombre() + " " + trabajador.getApellido_pat());
+                listaTrabajadorBoleta.add(trabajador);
             } else {
                 System.out.println("Trabajador no existe en la Base de datos");
             }
 
         }
-        mostrarTabla();
+
     }//GEN-LAST:event_agregarIdTrabajadorBTNActionPerformed
+
+    private void metodopagoBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_metodopagoBTNActionPerformed
+        // TODO add your handling code here:
+        //Lleno arraylist que vaya a usar
+        
+        //Defino variables
+        int precio_ref = 0;
+        double iva = 0;
+        double precio_total;
+        //Necesito generar la boleta 
+        for (int i = 0; i < listaLibroBoleta.size(); i++) {
+            Libro l = listaLibroBoleta.get(i);
+
+            precio_ref = precio_ref + l.getPrecio_ref();
+
+        }
+        iva = precio_ref * 0.19;
+        precio_total = iva + precio_ref;
+        String folio = folioTXT.getText();
+        Boleta boleta = new Boleta();
+        boleta.setId_cliente(cliente.getId_cliente());
+        boleta.setId_trabajador(trabajador.getId_trabajador());
+        boleta.setFolio(folio);
+        boleta.setCosto_iva(iva);
+        boleta.setPrecio_neto(precio_ref);
+        boleta.setPrecio_iva(precio_total);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        String fecha = dtf.format(LocalDateTime.now());
+        boleta.setFecha(fecha);
+        int seleccion = JOptionPane.showOptionDialog(null, "Seleccione una opcion",
+                "Selector de opciones", JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null,// null para icono por defecto.
+                new Object[]{"Efectivo", "Débito", "Crédito",}, "opcion 1");
+
+        if (seleccion == 0){
+
+            JOptionPane.showMessageDialog(null, "Ha pagado con efectivo, muchas gracias.");
+            boleta.setMetodo_pago(1);
+        } else if (seleccion == 1) {
+
+            JOptionPane.showMessageDialog(null, "Ha pagado con tarjeta de débito, muchas gracias.");
+            boleta.setMetodo_pago(2);
+        } else {
+
+            JOptionPane.showMessageDialog(null, "Ha pagado con tarjeta de crédito, muchas gracias.");
+            boleta.setMetodo_pago(3);
+        }
+        boleta.agregarBoleta(boleta.getFolio(),boleta.getPrecio_neto(),boleta.getPrecio_iva(),boleta.getCosto_iva(), boleta.getFecha(),boleta.getId_cliente(),boleta.getId_trabajador(), boleta.getMetodo_pago());
+        //Obtengo el ultimo id de boleta para agregar otra
+        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
+        manager.executeQueryConsultaTodasBoletas(listaBoleta);
+        
+        int ultimoidboleta=0;
+        
+        ultimoidboleta= listaBoleta.get(listaBoleta.size()-1).getId_boleta();
+        System.out.println(ultimoidboleta);
+        //Genero la venta con la id de boleta que viende desde la sentencia SQL 
+        
+        Venta v = new Venta();
+        v.setId_boleta(ultimoidboleta);
+        v.setId_cliente(cliente.getId_cliente());
+        v.setId_trabajador(trabajador.getId_trabajador());
+        v.setLibros_vendidos(listaLibroBoleta.size());
+        v.agregarVenta(v.getLibros_vendidos(),v.getId_cliente(),v.getId_trabajador(),v.getId_boleta());
+        //Genero el carro de compra que enlaza libro con venta y boleta
+        
+        manager.executeQueryConsultaLLenaTablaVenta(listaVentas);
+        
+        
+        int ultimoidventa=0;
+        ultimoidventa=listaVentas.get(listaVentas.size()-1).getId_venta();
+            
+        
+
+        
+        for (int z = 0; z < listaLibroBoleta.size(); z++) {
+            Carro_Compra cc = new Carro_Compra();
+            cc.setId_libro(listaLibroBoleta.get(z).getId_libro());
+            cc.setId_venta(ultimoidventa);
+            cc.agregarCarro(cc.getId_carro(),cc.getId_venta());
+        }
+        listaLibroBoleta.removeAll(listaLibroBoleta);
+       
+        
+       
+        
+        
+        
+    }//GEN-LAST:event_metodopagoBTNActionPerformed
 
     /**
      * @param args the command line arguments
@@ -401,7 +552,7 @@ public class ventaClientes extends javax.swing.JFrame {
     private javax.swing.JButton agregarIdLibroBTN;
     private javax.swing.JButton agregarIdTrabajadorBTN;
     private javax.swing.JTable boletaTBL;
-    private javax.swing.JButton comprarBTN;
+    private javax.swing.JTextField folioTXT;
     private javax.swing.JTextField idClienteVentaTXT;
     private javax.swing.JTextField idLibroVentaTXT;
     private javax.swing.JTextField idTrabajadorVentaTXT;
@@ -412,8 +563,10 @@ public class ventaClientes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton metodopagoBTN;
     private javax.swing.JButton verBoletasBTN;
     // End of variables declaration//GEN-END:variables
 

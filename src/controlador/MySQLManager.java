@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import modelo.Autor;
+import modelo.Boleta;
 import modelo.Categoria;
 import modelo.CategoriaLibroEnlace;
 import modelo.Cliente;
@@ -29,6 +30,7 @@ import modelo.LibroAutorEnlace;
 import modelo.TelefonosClientes;
 import modelo.TelefonosTrabajadores;
 import modelo.Trabajador;
+import modelo.Venta;
 
 public class MySQLManager {
 
@@ -1186,10 +1188,100 @@ public class MySQLManager {
         }
         return null;
     }
+     public ArrayList<Venta> executeQueryConsultaLLenaTablaVenta(ArrayList<Venta> listaVenta) {
+        System.out.println("ESTOY ENTRANDO Al METODO");
+        String query = "SELECT * FROM `ventas`";
+        Connection connection = createConnection();
+        Statement statement = null;
+        ResultSet set = null;
+
+        try {
+            System.out.println("Entrando al try");
+            statement = connection.createStatement();
+            set = statement.executeQuery(query);
+
+            System.out.println("Entrando al while");
+            while (set.next()) {
+               Venta v = new Venta(); 
+               v.setId_venta(set.getInt("id_venta"));
+               v.setLibros_vendidos(set.getInt("libros_vendidos"));
+               v.setId_cliente(set.getInt("id_cliente"));
+               v.setId_trabajador(set.getInt("id_trabajador"));
+               v.setId_boleta(set.getInt("id_boleta"));
+               listaVenta.add(v);
+            }
+
+            return listaVenta;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally { // Close in order: ResultSet, Statement, Connection.
+            try {
+                set.close();
+            } catch (Exception e) {
+            }
+            try {
+                statement.close();
+            } catch (Exception e) {
+            }
+            try {
+                connection.close();
+            } catch (Exception e) {
+            }
+        }
+        return null;
     
     
     
- 
+     }
+     public ArrayList<Boleta> executeQueryConsultaTodasBoletas(ArrayList<Boleta> listaBoleta) {
+        System.out.println("ESTOY ENTRANDO Al METODO");
+        String query = "SELECT * FROM `boleta`";
+        Connection connection = createConnection();
+        Statement statement = null;
+        ResultSet set = null;
+
+        try {
+            System.out.println("Entrando al try");
+            statement = connection.createStatement();
+            set = statement.executeQuery(query);
+
+            System.out.println("Entrando al while");
+            while (set.next()) {
+               Boleta v = new Boleta(); 
+               v.setId_boleta(set.getInt("id_boleta"));
+               v.setFolio(set.getString("folio"));
+               v.setPrecio_neto(set.getDouble("precio_neto"));
+               v.setPrecio_iva(set.getDouble("precio_iva"));
+               v.setFecha(set.getString("fecha_venta"));
+               v.setId_cliente(set.getInt("id_cliente"));
+               v.setId_trabajador(set.getInt("id_trabajador"));
+               v.setMetodo_pago(set.getInt("metodo_pago"));
+               listaBoleta.add(v);
+            }
+
+            return listaBoleta;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally { // Close in order: ResultSet, Statement, Connection.
+            try {
+                set.close();
+            } catch (Exception e) {
+            }
+            try {
+                statement.close();
+            } catch (Exception e) {
+            }
+            try {
+                connection.close();
+            } catch (Exception e) {
+            }
+        }
+        return null;
+    
+    
+    
+     }
+     
     
 }
 

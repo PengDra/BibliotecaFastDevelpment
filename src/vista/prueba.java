@@ -120,6 +120,7 @@ public class prueba extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         idlibroTXT = new javax.swing.JTextField();
         nuevoLibroBTN = new javax.swing.JButton();
+        venderlibroBTN = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -309,10 +310,23 @@ public class prueba extends javax.swing.JFrame {
 
         jLabel14.setText("ID libro");
 
+        idlibroTXT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                idlibroTXTActionPerformed(evt);
+            }
+        });
+
         nuevoLibroBTN.setText("Nuevo libro");
         nuevoLibroBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nuevoLibroBTNActionPerformed(evt);
+            }
+        });
+
+        venderlibroBTN.setText("Vender Libro");
+        venderlibroBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                venderlibroBTNActionPerformed(evt);
             }
         });
 
@@ -332,6 +346,8 @@ public class prueba extends javax.swing.JFrame {
                 .addComponent(distribuidoresBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(verFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(venderlibroBTN)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -446,7 +462,8 @@ public class prueba extends javax.swing.JFrame {
                     .addComponent(agregarCategoriaBTN)
                     .addComponent(agregarIdiomaBTN)
                     .addComponent(distribuidoresBTN)
-                    .addComponent(verFactura))
+                    .addComponent(verFactura)
+                    .addComponent(venderlibroBTN))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -891,7 +908,7 @@ public class prueba extends javax.swing.JFrame {
             matriz[i][11] = precio_iva;
         }
 
-        //Agregamos datos al DTM    
+        //Agregamos datos al DT  
         DefaultTableModel dt = new DefaultTableModel(matriz, columnas);
 
         nuevafacturaTBL.setModel(dt);
@@ -1144,6 +1161,14 @@ public class prueba extends javax.swing.JFrame {
         mostrarTablaFactura();
 
     }//GEN-LAST:event_nuevoLibroBTNActionPerformed
+
+    private void idlibroTXTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idlibroTXTActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_idlibroTXTActionPerformed
+
+    private void venderlibroBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venderlibroBTNActionPerformed
+        new ventaClientes().setVisible(true);
+    }//GEN-LAST:event_venderlibroBTNActionPerformed
     public void mostrarTabla() {
         System.out.println("Mostrando Tabla de Libros");
         //Limpiamos las listas que contienen todas los datos
@@ -1424,6 +1449,7 @@ public class prueba extends javax.swing.JFrame {
     private javax.swing.JTextField numerofolioTXT;
     private javax.swing.JTextField precioReferencialTXT;
     private javax.swing.JTextField tituloTXT;
+    private javax.swing.JButton venderlibroBTN;
     private javax.swing.JButton verFactura;
     // End of variables declaration//GEN-END:variables
 }

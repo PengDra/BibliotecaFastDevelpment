@@ -7,6 +7,11 @@ package vista;
 
 import controlador.MySQLManager;
 import java.util.ArrayList;
+
+import javax.swing.table.DefaultTableModel;
+import modelo.Autor;
+import modelo.Boleta;
+
 import modelo.Cliente;
 import modelo.Libro;
 import modelo.Trabajador;
@@ -18,15 +23,23 @@ import modelo.Trabajador;
 public class ventaClientes extends javax.swing.JFrame {
 
     ArrayList<Libro> listaLibro = new ArrayList<>();
+    ArrayList<Libro> listaLibroBoleta = new ArrayList<>();
     ArrayList<Cliente> listaCliente = new ArrayList<>();
+    ArrayList<Autor> listaAutor = new ArrayList<Autor>();
     ArrayList<Trabajador> listaTrabajador = new ArrayList<>();
-    ArrayList<Libro> listaLibroFactura = new ArrayList<>();
+    ArrayList<Boleta> listaBoleta = new ArrayList<Boleta>();
+    int ultimaboleta = 0;
+    Cliente cliente = new Cliente();
+    Trabajador trabajador = new Trabajador();
+    Libro libro = new Libro();
 
     /**
      * Creates new form ventaClientes
      */
     public ventaClientes() {
+       
         initComponents();
+        mostrarTabla();
     }
 
     /**
@@ -39,9 +52,6 @@ public class ventaClientes extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        agregarNuevoClienteBTN = new javax.swing.JButton();
-        agregarTrabajadorBTN = new javax.swing.JButton();
-        verLibrosBTN = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -51,36 +61,19 @@ public class ventaClientes extends javax.swing.JFrame {
         agregarIdClienteBTN = new javax.swing.JButton();
         agregarIdLibroBTN = new javax.swing.JButton();
         agregarIdTrabajadorBTN = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        vistaPreviaCompraTBL = new javax.swing.JTable();
-        jLabel5 = new javax.swing.JLabel();
-        agregarABoletaBTN = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        boletaTBL = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         comprarBTN = new javax.swing.JButton();
         verBoletasBTN = new javax.swing.JButton();
+        idclienteLBL = new javax.swing.JLabel();
+        idlibroLBL = new javax.swing.JLabel();
+        idtrabajadorLBL = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Página de venta de libros a clientes Fast Development");
-
-        agregarNuevoClienteBTN.setText("Agregar nuevo cliente");
-        agregarNuevoClienteBTN.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                agregarNuevoClienteBTNActionPerformed(evt);
-            }
-        });
-
-        agregarTrabajadorBTN.setText("Agregar nuevo trabajador");
-        agregarTrabajadorBTN.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                agregarTrabajadorBTNActionPerformed(evt);
-            }
-        });
-
-        verLibrosBTN.setText("Ver libros");
 
         jLabel2.setText("Ingrese ID de libro a comprar.");
 
@@ -127,25 +120,7 @@ public class ventaClientes extends javax.swing.JFrame {
             }
         });
 
-        vistaPreviaCompraTBL.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Nombre de cliente", "Nombre de libro", "Precio de libro", "Nombre de trabajador"
-            }
-        ));
-        jScrollPane1.setViewportView(vistaPreviaCompraTBL);
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel5.setText("Revise sus datos en esta tabla antes de confirmar:");
-
-        agregarABoletaBTN.setText("Agregar a la boleta");
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        boletaTBL.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
@@ -156,7 +131,7 @@ public class ventaClientes extends javax.swing.JFrame {
                 "Nombre de libro", "Precio neto", "Precio con IVA", "Costo IVA", "Fecha de venta", "Hora de venta", "Nombre de cliente", "Nombre de trabajador"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(boletaTBL);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel6.setText("Vista previa de su boleta, si los datos son correctos, presione el botón \"Comprar\" para ver la forma de pago.");
@@ -165,119 +140,94 @@ public class ventaClientes extends javax.swing.JFrame {
 
         verBoletasBTN.setText("Ver boletas");
 
+        idclienteLBL.setText("Ingrese Id de cliente");
+
+        idlibroLBL.setText("Ingrese Id de libro");
+
+        idtrabajadorLBL.setText("Ingrese Id de trabajador");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 46, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel6))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(idLibroVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(idTrabajadorVentaTXT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(agregarIdTrabajadorBTN)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(idtrabajadorLBL))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(26, 26, 26)
+                                        .addComponent(agregarIdLibroBTN)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(idlibroLBL))))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel4))
+                        .addGap(339, 339, 339)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(comprarBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(verBoletasBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(100, 100, 100))
+                            .addComponent(verBoletasBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel6)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(verLibrosBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(agregarNuevoClienteBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(agregarTrabajadorBTN)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(idLibroVentaTXT, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
-                                            .addComponent(idClienteVentaTXT))
-                                        .addGap(29, 29, 29)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(agregarIdLibroBTN)
-                                            .addComponent(agregarIdClienteBTN)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(idTrabajadorVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(29, 29, 29)
-                                        .addComponent(agregarIdTrabajadorBTN)))
-                                .addGap(55, 55, 55)))
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1)
-                                .addGap(30, 30, 30)))
-                        .addComponent(agregarABoletaBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(57, 57, 57))))
+                        .addComponent(idClienteVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(agregarIdClienteBTN)
+                        .addGap(18, 18, 18)
+                        .addComponent(idclienteLBL))
+                    .addComponent(jLabel3))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(idClienteVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(agregarIdClienteBTN)
+                    .addComponent(idclienteLBL))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(comprarBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(idLibroVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(agregarIdLibroBTN)
+                    .addComponent(idlibroLBL))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 2, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(idClienteVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(agregarIdClienteBTN))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(agregarNuevoClienteBTN)
-                        .addGap(35, 35, 35)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(idLibroVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(agregarIdLibroBTN))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(verLibrosBTN)
-                        .addGap(35, 35, 35)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(idTrabajadorVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(agregarIdTrabajadorBTN))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(agregarTrabajadorBTN)
-                        .addGap(153, 153, 153))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(agregarABoletaBTN, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(verBoletasBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(idTrabajadorVentaTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(agregarIdTrabajadorBTN)
+                    .addComponent(idtrabajadorLBL))
+                .addGap(57, 57, 57)
                 .addComponent(jLabel6)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(comprarBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(verBoletasBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(166, 166, 166))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void agregarNuevoClienteBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarNuevoClienteBTNActionPerformed
-        new vistaClientes().setVisible(true);
-    }//GEN-LAST:event_agregarNuevoClienteBTNActionPerformed
-
-    private void agregarTrabajadorBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarTrabajadorBTNActionPerformed
-        new vistaTrabajadores().setVisible(true);
-    }//GEN-LAST:event_agregarTrabajadorBTNActionPerformed
 
     private void idClienteVentaTXTKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_idClienteVentaTXTKeyTyped
         char x = evt.getKeyChar();
@@ -301,13 +251,25 @@ public class ventaClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_idTrabajadorVentaTXTKeyTyped
 
     private void agregarIdClienteBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarIdClienteBTNActionPerformed
+       
+        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
+        manager.executeQueryConsultaLLenaTablaClientes(listaCliente);
+        
+
         int idCliente;
         idCliente = Integer.parseInt(idClienteVentaTXT.getText());
 
-        Cliente cliente = new Cliente();
-        cliente.getId_cliente();
+        for (int i = 0; i < listaCliente.size(); i++) {
+            if (idCliente == listaCliente.get(i).getId_cliente()) {
+                cliente = listaCliente.get(i);
+                System.out.println(cliente.getId_cliente());
+                idclienteLBL.setText("Id de cliente actual en boleta" + cliente.getId_cliente());
+            } else {
+                idclienteLBL.setText("Cliente no existe en la Base de datos");
+            }
+            
+        }
 
-        limpiarTabla();
         mostrarTabla();
     }//GEN-LAST:event_agregarIdClienteBTNActionPerformed
     private void limpiarTabla() {
@@ -317,53 +279,85 @@ public class ventaClientes extends javax.swing.JFrame {
     }
 
     private void mostrarTabla() {
-        limpiarTabla();
-        MySQLManager manager = new MySQLManager("localhost", "3307", "bibliotecafastdevelopment", "root", "");
+        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
         manager.executeQueryConsultaLLenaTablaLibro(listaLibro);
         manager.executeQueryConsultaLLenaTablaClientes(listaCliente);
         manager.executeQueryConsultaLLenaTablaTrabajadores(listaTrabajador);
 
-        String matriz[][] = new String[listaCliente.size()][4];
+        
+        String columnas[]={"Nombre libro","Precio Neto", "Precio con Iva","Costo IVA","Fecha Venta","Nombre Cliente","Nombre Trabajador"};
+        String matriz[][] = new String[listaLibroBoleta.size()][4];
+       
+        if (listaLibro.isEmpty()) {
+            String[] columna = {"No hay libros en ", "la base de datos"};
+            String[][] matrix = new String[1][1];
+            DefaultTableModel dt = new DefaultTableModel(matrix, columna);
+            boletaTBL.setModel(dt);
 
-        for (int i = 0; i < listaCliente.size(); i++) {
+        } else {
+        for (int i = 0; i < listaLibroBoleta.size(); i++) {
+
+
 
             String idCliente = Integer.toString(listaCliente.get(i).getId_cliente());
+            String precio_ref = Integer.toString(listaLibroBoleta.get(i).getPrecio_ref());
+            String precio_iva = precio_ref + Double.toString(listaLibroBoleta.get(i).getPrecio_ref() * 0.19);
+         
+            matriz[i][0] = idCliente;
+            matriz[i][1] = Integer.toString(listaLibroBoleta.get(i).getPrecio_ref());
+            matriz[i][2] = precio_iva;
+            matriz[i][3] = precio_ref + Double.toString(listaLibroBoleta.get(i).getPrecio_ref() * 0.19);
+            
+            matriz[i][4] ="";
+            matriz[i][5] ="";
+            matriz[i][6] ="";
+            
 
-            String precio_ref = Integer.toString(listaLibroFactura.get(i).getPrecio_ref());
-            String precio_iva = precio_ref + Double.toString(listaLibroFactura.get(i).getPrecio_ref() * 0.19);
 
-            matriz[i][0] = listaCliente.get(i).getNombre();
-            matriz[i][1] = Integer.toString(listaLibroFactura.get(i).getPrecio_ref());
-            matriz[i][2] = Double.toString(listaLibroFactura.get(i).getPrecio_ref() * 0.19);
-            matriz[i][3] = precio_ref + Double.toString(listaLibroFactura.get(i).getPrecio_ref() * 0.19);
-
+            
         }
+        DefaultTableModel dtm = new DefaultTableModel(matriz, columnas);
+        boletaTBL.setModel(dtm); 
 
     }
+    }
     private void agregarIdLibroBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarIdLibroBTNActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:  
+        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");        
+        manager.executeQueryConsultaLLenaTablaLibro(listaLibro);          
         int idLibro;
-        idLibro = Integer.parseInt(idLibroVentaTXT.getText());
-      
-        Trabajador t1 = new Trabajador();
         
-        t1.getId_trabajador();
-                 
-        limpiarTabla();
+        idLibro = Integer.parseInt(idLibroVentaTXT.getText());
+        
+        for (int i = 0; i < listaLibro.size(); i++) {
+            System.out.println(listaLibro.get(i).getId_libro());
+            if (idLibro == listaLibro.get(i).getId_libro()) {
+                libro = listaLibro.get(i);
+                idlibroLBL.setText("Id de Libro actual en boleta" + libro.getId_libro());
+            } else {
+                idlibroLBL.setText("Libro no existe en la Base de datos");
+            }
+
+        }
         mostrarTabla();
     }//GEN-LAST:event_agregarIdLibroBTNActionPerformed
 
     private void agregarIdTrabajadorBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarIdTrabajadorBTNActionPerformed
-        // TODO add your handling code here:
-        
-        int idTrabajador;
-        idTrabajador = Integer.parseInt(idTrabajadorVentaTXT.getText());
-      
-        Trabajador t1 = new Trabajador();
-        
-        t1.getId_trabajador();
-                 
-        limpiarTabla();
+        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
+        manager.executeQueryConsultaLLenaTablaTrabajadores(listaTrabajador);
+
+        int idtrabajador;
+        idtrabajador = Integer.parseInt(idTrabajadorVentaTXT.getText());
+
+        for (int i = 0; i < listaTrabajador.size(); i++) {
+            if (idtrabajador == listaTrabajador.get(i).getId_trabajador()) {
+                trabajador = listaTrabajador.get(i);
+                idlibroLBL.setText("Id de Trabajador actual en boleta" + trabajador.getId_trabajador());
+            } else {
+                System.out.println("Trabajador no existe en la Base de datos");
+            }
+
+        }
         mostrarTabla();
     }//GEN-LAST:event_agregarIdTrabajadorBTNActionPerformed
 
@@ -403,28 +397,24 @@ public class ventaClientes extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton agregarABoletaBTN;
     private javax.swing.JButton agregarIdClienteBTN;
     private javax.swing.JButton agregarIdLibroBTN;
     private javax.swing.JButton agregarIdTrabajadorBTN;
-    private javax.swing.JButton agregarNuevoClienteBTN;
-    private javax.swing.JButton agregarTrabajadorBTN;
+    private javax.swing.JTable boletaTBL;
     private javax.swing.JButton comprarBTN;
     private javax.swing.JTextField idClienteVentaTXT;
     private javax.swing.JTextField idLibroVentaTXT;
     private javax.swing.JTextField idTrabajadorVentaTXT;
+    private javax.swing.JLabel idclienteLBL;
+    private javax.swing.JLabel idlibroLBL;
+    private javax.swing.JLabel idtrabajadorLBL;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
     private javax.swing.JButton verBoletasBTN;
-    private javax.swing.JButton verLibrosBTN;
-    private javax.swing.JTable vistaPreviaCompraTBL;
     // End of variables declaration//GEN-END:variables
 
 }

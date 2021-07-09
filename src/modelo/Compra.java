@@ -5,19 +5,22 @@
  */
 package modelo;
 
+import controlador.MySQLManager;
+
 /**
  *
  * @author Gn3p
  */
 public class Compra {
-     private int id_compra;
-     private int id_libro;
-     private int id_factura;
-     private int id_distribuidor;
+
+    private int id_compra;
+    private int id_libro;
+    private int id_factura;
+    private int id_distribuidor;
 
     public Compra() {
     }
-    
+
     public int getId_compra() {
         return id_compra;
     }
@@ -49,11 +52,13 @@ public class Compra {
     public void setId_distribuidor(int id_distribuidor) {
         this.id_distribuidor = id_distribuidor;
     }
-    public void agregarCompra(int id_libro,int id_dist, int id_fact){
-        
-    
-    
+
+    public void agregarCompra(int id_libro, int id_dist, int id_fact) {
+
+        MySQLManager manager = new MySQLManager("localhost", "3306", "bibliotecafastdevelopment", "root", "");
+        manager.executeUpdate("INSERT INTO `compras`(`id_libro`, `id_dist`, `id_fact`) VALUES ("+id_libro+","+id_dist+","+id_fact+")");
+
     }
-     
+
     
 }

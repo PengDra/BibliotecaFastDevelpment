@@ -21,6 +21,7 @@ import modelo.DireccionesClientes;
 import modelo.DireccionesTrabajadores;
 import modelo.Distribuidor;
 import modelo.Editorial;
+import modelo.Factura;
 import modelo.Idioma;
 import modelo.IdiomaLibroEnlace;
 import modelo.Libro;
@@ -1139,7 +1140,52 @@ public class MySQLManager {
         }
         return null;
     }
-    
+     public ArrayList<Factura> executeQueryConsultaLLenaTablaFactura(ArrayList<Factura> listaFactura) {
+        System.out.println("ESTOY ENTRANDO Al METODO");
+        String query = "SELECT * FROM `factura`";
+        Connection connection = createConnection();
+        Statement statement = null;
+        ResultSet set = null;
+
+        try {
+            System.out.println("Entrando al try");
+            statement = connection.createStatement();
+            set = statement.executeQuery(query);
+
+            System.out.println("Entrando al while");
+            while (set.next()) {
+                Factura factura = new Factura();
+                factura.setId_factura(set.getInt("id_fact"));
+                factura.setFolio(set.getInt("folio"));
+                factura.setPrecio_neto(set.getDouble("precio_neto"));
+                factura.setPrecio_iva(set.getDouble("precio_iva"));
+                factura.setCosto_iva(set.getDouble("costo_iva"));
+                factura.setFecha_compra(set.getString("fecha_compra"));
+                factura.setId_dist(set.getInt("id_dist"));
+                factura.setMetodo_pago(set.getInt("metodo_pago"));
+
+                listaFactura.add(factura);
+            }
+
+            return listaFactura;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally { // Close in order: ResultSet, Statement, Connection.
+            try {
+                set.close();
+            } catch (Exception e) {
+            }
+            try {
+                statement.close();
+            } catch (Exception e) {
+            }
+            try {
+                connection.close();
+            } catch (Exception e) {
+            }
+        }
+        return null;
+    }
     
     
     
